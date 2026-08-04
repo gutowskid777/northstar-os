@@ -101,8 +101,12 @@ import json, re, datetime, pathlib
 
 FILES = ["brain/queue.json", "dashboard/data/projects.json",
          "dashboard/data/life-data.json", "dashboard/data/morning-brief.json"]
-DATE = re.compile(r"\b(\d{4})-(\d{2})-(\d{2})\b")
+# No trailing \b: it would fail on "2026-01-15T07:00:00Z", because the boundary between
+# "5" and "T" doesn't exist and morning-brief's generated_at would never be restamped.
+DATE = re.compile(r"(?<![\d-])(\d{4})-(\d{2})-(\d{2})")
 
+# Anchor on the QUEUE's newest date, not the newest across every file. Anchoring on the max
+# would mean one file carrying a recent date silently disables the whole restamp.
 blobs = {}
 newest = None
 for f in FILES:
@@ -111,6 +115,8 @@ for f in FILES:
         continue
     text = p.read_text()
     blobs[f] = text
+    if f != "brain/queue.json":
+        continue
     for m in DATE.finditer(text):
         try:
             d = datetime.date(*map(int, m.groups()))

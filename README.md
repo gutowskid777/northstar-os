@@ -15,6 +15,8 @@ review remembers it's due by watermark instead of by schedule.
 None of that is a rule you have to trust it to follow. **It's a pre-commit hook that blocks the
 commit.**
 
+![The dashboard, Home tab](docs/img/dashboard-home.jpg)
+
 ---
 
 ## Install
@@ -55,6 +57,8 @@ means not noted.
 **A dashboard.** `python3 serve.py`, then `127.0.0.1:8000`. Your brief, your projects on a kanban,
 your todos, a nested life list, an archive. One HTML file and one Python file, both zero-dependency,
 localhost only.
+
+![The dashboard, Builds tab](docs/img/dashboard-builds.jpg)
 
 **Guard rails that hold when nobody's watching.** See below.
 
