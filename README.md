@@ -35,6 +35,11 @@ gives you your first move. A few minutes, and nothing to fill in by hand.
 Requirements: [Claude Code](https://claude.com/claude-code), `git`, and `python3`. No npm, no
 dependencies, no accounts, no API keys. Everything is files on your disk.
 
+On first launch Claude Code will ask you to approve the project hook in `.claude/settings.json`.
+That's `brain/tools/reply-brevity.sh`, nine lines of `cat`, and you should read it before you say
+yes. Approving a hook from a repo you cloned without reading it is a bad habit and this one is
+short enough that you don't have to.
+
 ---
 
 ## What you get

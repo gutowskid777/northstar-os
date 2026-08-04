@@ -67,7 +67,7 @@ is upkeep, and upkeep is the one thing this system exists to avoid.
     (c) a manual pull. The weekly review also KILLS what never earns it.
   - `decision` — a call only the user can make. Stays surfaced in Your Move until answered; past
     its `expires` date it force-closes at the weekly review.
-  - `reference` — a fact or link worth keeping in the queue's orbit.
+  - `reference` — a fact or link worth keeping alongside the work.
   - `bug` — something broken, tracked like a task.
 - **Reconcile at session end (§1.5):** diff the session's actual work against open rows, flip
   statuses, set `verified_by`. Done-detection is a step, not a hope.
