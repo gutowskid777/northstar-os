@@ -1,19 +1,25 @@
 # northstar-os
 
-**A personal AI OS for Claude Code. Zero upkeep, and it tells you when you've drifted off your top goal.**
+**It catches you rabbit-holing. It runs itself. Setup takes five minutes.**
 
-Most AI memory systems are a folder of markdown rules the assistant reads once and forgets.
+You know the feeling of surfacing after three hours and realizing none of it mattered. Your AI
+watched the whole thing and said nothing, because it had no idea what you were supposed to be doing.
 
-This one interrupts you. It reads your ranked goals at the start of every session, and when you're
-three hours into something that isn't on the list, it says so mid-answer. Not in a report
-afterwards.
+northstar-os gives it your ranked goals, and then it interrupts you. Mid-answer, in the same turn,
+not in a summary afterwards: *"heads up, your #1 is the launch, and this doesn't move it."* You can
+keep going. It just stops being an accident.
 
-It also runs itself. No cron, no daily grooming. The state file is capped at 150 lines and rotates
-its own history. The queue caps at 250 rows and archives closed ones under pressure. The weekly
-review remembers it's due by watermark instead of by schedule.
+The other half is that it costs you nothing to keep. No cron, no daily grooming, no weekly tidy-up.
+Files cap themselves and rotate their own history. The weekly review remembers it's due on its own.
+It proposes its own improvements, scored against your goals, and the default answer is no.
 
-None of that is a rule you have to trust it to follow. **It's a pre-commit hook that blocks the
-commit.**
+**Five minutes to adopt it.** Clone it, type `/setup`, answer some questions about what you're
+trying to do. It writes your goals, your facts, your working style, and your first queue.
+
+![Running /setup in a fresh clone](docs/img/setup-cli.png)
+
+And none of it is a rule you have to trust it to follow. **Every one is a hook, a cap, or a schema
+check** — the state file physically cannot grow past its cap, because the commit gets blocked.
 
 ![The dashboard, Home tab](docs/img/dashboard-home.jpg)
 
