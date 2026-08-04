@@ -1810,8 +1810,8 @@
           <div class="about-prose">
             This is a personal dashboard you run on your own machine. The whole interface is a single
             HTML file with no framework, no bundler, and no build step. Everything you see is read from
-            plain JSON files in <code>dashboard/data/</code>, and everything you change is written straight
-            back to them. Nothing leaves your computer.
+            plain JSON files, and everything you change is written straight back to them.
+            Nothing leaves your computer.
           </div>
         </div>
 
@@ -1848,10 +1848,13 @@
 
         <div class="about-section">
           <div class="about-section-label">Data Layer</div>
-          <div class="about-section-title">Six files in <code>dashboard/data/</code>.</div>
+          <div class="about-section-title">Five files in <code>dashboard/data/</code>, plus the queue.</div>
           <div class="about-prose">
             Edit them by hand, generate them with a script, or let the dashboard write them for you.
-            They are ordinary JSON &mdash; nothing is encoded, hashed, or migrated.
+            They are ordinary JSON &mdash; nothing is encoded, hashed, or migrated. The one exception is
+            the queue: it lives in <code>brain/queue.json</code>, outside this folder, because it is the
+            single source of truth the rest of the system reads. A second copy under
+            <code>dashboard/data/</code> would fork it, so there isn't one.
           </div>
           <div class="about-files">
             <div class="about-file-card">
@@ -1859,8 +1862,8 @@
               <div class="about-file-desc">An array of projects: <code>id</code>, <code>code</code>, <code>name</code>, <code>status</code>, <code>stack</code>, <code>next_actions</code>. Status is one of <strong>active / queue / paused / done</strong>.</div>
             </div>
             <div class="about-file-card">
-              <div class="about-file-name">queue.json</div>
-              <div class="about-file-desc">One queue for everything: <code>{ "_meta": {...}, "items": [...] }</code>. Each row has a <code>type</code> of <code>task</code>, <code>idea</code>, or <code>decision</code>. The Todo tab renders only tasks, but writes preserve every row, so ideas and decisions can never be dropped by a save.</div>
+              <div class="about-file-name">brain/queue.json</div>
+              <div class="about-file-desc">Not in <code>dashboard/data/</code> &mdash; this is THE queue for the whole system, reachable over HTTP only through <code>/api/queue</code>. Shape: <code>{ "_meta": {...}, "items": [...] }</code>. Every row needs <code>id</code>, <code>type</code>, and <code>status</code>; <code>type</code> is <code>task</code>, <code>idea</code>, <code>decision</code>, <code>reference</code>, or <code>bug</code>. The Todo tab renders only tasks, but writes preserve every row, so ideas and decisions can never be dropped by a save.</div>
             </div>
             <div class="about-file-card">
               <div class="about-file-name">life-data.json</div>
@@ -1930,7 +1933,7 @@
           <div class="about-prose">
             <code>serve.py</code> is pure Python standard library &mdash; no web framework, no pip install, no virtualenv.
             If you have Python 3, you can run it. It serves this page and exposes a small
-            <code>/api/*</code> surface that reads and writes <code>dashboard/data/</code>. Writes are atomic and keep
+            <code>/api/*</code> surface over <code>dashboard/data/</code> and <code>brain/queue.json</code>. Writes are atomic and keep
             a <code>.bak</code> of the previous version, so a crash mid-save cannot truncate your queue.
           </div>
           <div class="about-files">
@@ -1941,6 +1944,10 @@
             <div class="about-file-card">
               <div class="about-file-name">Do not port-forward it</div>
               <div class="about-file-desc">It binds <code>127.0.0.1</code> and has <strong>no authentication</strong>, on purpose &mdash; it is a single-user tool on your own machine. Anyone who can reach the port can read and overwrite all of your data. Do not expose it to your Wi-Fi, a tunnel, or a container port map.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">Only <code>dashboard/</code> is served</div>
+              <div class="about-file-desc"><code>dashboard/</code> is the entire static root, so <code>/brain/queue.json</code>, <code>/.env</code>, and <code>/.git/config</code> all 404 &mdash; there is no static path out of it. Files outside it are reachable only where a named <code>/api/*</code> route deliberately opens one, and each of those validates what it writes.</div>
             </div>
           </div>
         </div>
@@ -2435,8 +2442,15 @@
 
   function todoAdd(projectId, codePrefix, text) {
     const code = nextCode(codePrefix);
+    // id must NOT be the code. queue.json's own _meta says why: a code freed by a clobber gets
+    // re-issued to an unrelated row, and then two rows share it. brain-guard rejects duplicate
+    // ids at commit time, which is a confusing place to find out. So derive a stable slug from
+    // the text, and fall back to the code plus a timestamp if the text yields nothing usable.
+    const slug = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+    let id = slug || (code.toLowerCase() + '-' + Date.now());
+    if (todoData.some(r => r.id === id)) id += '-' + Date.now().toString(36).slice(-4);
     const item = {
-      id: code, code, type: 'task',
+      id, code, type: 'task',
       project_id: projectId === '__general' ? 'general' : projectId,
       text, status: 'todo', starred: false,
       created: new Date().toISOString().slice(0, 10)
@@ -2697,17 +2711,27 @@
 
   // ── ARCHIVE ───────────────────────────────────
   async function loadArchive() {
+    // Both fetches are caught individually so one missing file doesn't hide the other's rows.
+    // But a failure must SAY so: silently rendering [] here printed "Nothing archived yet"
+    // with the server down, which reads as "you have no history" rather than "I couldn't look".
+    // It also clobbered the in-memory queue with an empty array.
+    let failed = null;
+    const [rawTodos, rawLife] = await Promise.all([
+      fetchTodoItems().catch(e => { failed = `${API.queue} — ${e.message}`; return null; }),
+      fetchJSON(API.life).catch(e => { failed = `${API.life} — ${e.message}`; return null; })
+    ]);
+    if (failed) {
+      document.getElementById('archive-wrap').innerHTML =
+        `<div class="error-state">Could not load ${failed}<br>Is serve.py running?</div>`;
+      return;
+    }
     try {
-      const [rawTodos, rawLife] = await Promise.all([
-        fetchTodoItems().catch(() => []),
-        fetchJSON(API.life).catch(() => [])
-      ]);
       todoData = rawTodos;
       lifeData = rawLife;
       renderArchive();
     } catch(e) {
       document.getElementById('archive-wrap').innerHTML =
-        `<div class="error-state">Could not load ${API.queue} — ${e.message}</div>`;
+        `<div class="error-state">Could not render the archive — ${e.message}</div>`;
     }
   }
 

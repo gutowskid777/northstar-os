@@ -9,10 +9,14 @@ every write from the dashboard would silently fail.
 
 WHAT IT SERVES
   dashboard/            the only static root. index.html and nothing above it.
-  /api/*                explicit JSON routes, all of them reading and writing
-                        dashboard/data/. There is no route that can reach a file
-                        outside dashboard/, so a sibling directory in the repo
-                        (notes, credentials, .git) is unreachable over HTTP.
+  /api/*                explicit JSON routes. Five of them read and write
+                        dashboard/data/; /api/queue reads and writes brain/queue.json,
+                        which is THE queue for the whole system and must not be
+                        forked into a second copy.
+
+  brain/ is NOT a static root. `GET /brain/queue.json` 404s. It is reachable only
+  through /api/queue, which validates the document before it writes. That is the
+  whole reason for having explicit API routes instead of static file serving.
 
 SECURITY POSTURE
   - Binds 127.0.0.1 ONLY. Binding 0.0.0.0 would publish this to everyone on the
@@ -44,8 +48,11 @@ ROOT       = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(ROOT, 'dashboard')
 DATA_DIR   = os.path.join(STATIC_DIR, 'data')
 
+# THE queue lives in brain/ — outside the static root on purpose. It is the source of
+# truth the rest of the system reads, and a second copy under dashboard/data/ would fork it.
+QUEUE_PATH       = os.path.join(ROOT, 'brain', 'queue.json')
+
 PROJECTS_PATH    = os.path.join(DATA_DIR, 'projects.json')
-QUEUE_PATH       = os.path.join(DATA_DIR, 'queue.json')
 LIFE_PATH        = os.path.join(DATA_DIR, 'life-data.json')
 BRIEF_PATH       = os.path.join(DATA_DIR, 'morning-brief.json')
 BUILD_ORDER_PATH = os.path.join(DATA_DIR, 'build-order.json')
@@ -210,7 +217,8 @@ class Handler(SimpleHTTPRequestHandler):
                 self.end_headers()
                 return
             if path == '/api/health':
-                return self._send_json(200, {'ok': True, 'data_dir': 'dashboard/data'})
+                return self._send_json(200, {'ok': True, 'data_dir': 'dashboard/data',
+                                             'queue': 'brain/queue.json'})
             if path == '/api/projects':
                 return self._send_json(200, load_json(PROJECTS_PATH, []))
             if path == '/api/queue':
@@ -418,7 +426,7 @@ if __name__ == '__main__':
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     print(f'Dashboard  ->  http://{HOST}:{PORT}/')
     print('Serving    ->  dashboard/  (localhost only - no other machine can reach it)')
-    print('Data       ->  dashboard/data/')
+    print('Data       ->  dashboard/data/  +  brain/queue.json (via /api/queue only)')
     print('Press Ctrl+C to stop.')
     try:
         server.serve_forever()

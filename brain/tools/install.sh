@@ -88,7 +88,56 @@ cp "$TMPQ" "$ROOT/brain/queue.json"
 rm -f "$TMPQ"
 echo "blocked a bad commit, as it should"
 
-# --- 4. what's next --------------------------------------------------------------------------
+# --- 4. restamp the seed dates to today ------------------------------------------------------
+# The example data ships with fixed dates, so a clone six months after release opens showing
+# "203d old" on every card and reads as an abandoned demo. This shifts every date in the seed
+# forward so the newest becomes today, preserving the relative gaps between them.
+#
+# Runs ONCE and only on untouched seed data: it keys off _meta.seed in brain/queue.json and
+# removes that marker when it's done. Your own rows are never touched.
+if python3 -c "import json,sys; sys.exit(0 if json.load(open('brain/queue.json'))['_meta'].get('seed') else 1)" 2>/dev/null; then
+  python3 - <<'PY'
+import json, re, datetime, pathlib
+
+FILES = ["brain/queue.json", "dashboard/data/projects.json",
+         "dashboard/data/life-data.json", "dashboard/data/morning-brief.json"]
+DATE = re.compile(r"\b(\d{4})-(\d{2})-(\d{2})\b")
+
+blobs = {}
+newest = None
+for f in FILES:
+    p = pathlib.Path(f)
+    if not p.exists():
+        continue
+    text = p.read_text()
+    blobs[f] = text
+    for m in DATE.finditer(text):
+        try:
+            d = datetime.date(*map(int, m.groups()))
+        except ValueError:
+            continue
+        if newest is None or d > newest:
+            newest = d
+
+if newest:
+    shift = datetime.date.today() - newest
+    def bump(m):
+        try:
+            return (datetime.date(*map(int, m.groups())) + shift).isoformat()
+        except ValueError:
+            return m.group(0)
+    for f, text in blobs.items():
+        pathlib.Path(f).write_text(DATE.sub(bump, text))
+    print("  ✓ seed dates restamped to today (shifted %d days)" % shift.days)
+
+q = json.loads(pathlib.Path("brain/queue.json").read_text())
+q["_meta"].pop("seed", None)
+q["_meta"]["count"] = len(q["items"])
+pathlib.Path("brain/queue.json").write_text(json.dumps(q, indent=2, ensure_ascii=False) + "\n")
+PY
+fi
+
+# --- 5. what's next --------------------------------------------------------------------------
 cat <<'NEXT'
 
   Done. Two things left:

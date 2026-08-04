@@ -12,14 +12,104 @@
       "bug": "something broken. status: todo | doing | done | killed"
     },
     "row_schema": {
-      "required": ["id", "type", "status"],
+      "required": [
+        "id",
+        "type",
+        "status"
+      ],
       "id": "short human slug. The ONLY safe identifier. Never reuse one.",
       "code": "PREFIX-N display label. NOT a safe identifier: a code freed by a clobber gets re-issued and then two rows share it.",
-      "optional": ["code", "project_id", "text", "created", "starred", "verbatim", "source", "score", "rationale", "next", "verified_by", "expires"]
+      "optional": [
+        "code",
+        "project_id",
+        "text",
+        "created",
+        "starred",
+        "verbatim",
+        "source",
+        "score",
+        "rationale",
+        "next",
+        "verified_by",
+        "expires"
+      ]
     },
     "caps": "250 rows / 300,000 bytes, enforced by brain/tools/brain-guard.sh at commit time. Rotate at 90% of cap, not on a schedule.",
     "rotation": "Move rows with a closed status dated before the current month to brain/history/queue-closed-YYYY-MM.json. Rotate, never delete.",
-    "count": 0
+    "count": 7,
+    "seed": true
   },
-  "items": []
+  "items": [
+    {
+      "id": "example-starred-task",
+      "code": "SITE-1",
+      "type": "task",
+      "status": "todo",
+      "starred": true,
+      "project_id": "example-site",
+      "text": "Example starred task - this is what Today's Focus shows on the Home tab",
+      "created": "2026-01-12"
+    },
+    {
+      "id": "example-open-task",
+      "code": "SITE-2",
+      "type": "task",
+      "status": "todo",
+      "starred": false,
+      "project_id": "example-site",
+      "text": "Example task - unstarred, so it only shows under All or its project tab",
+      "created": "2026-01-11"
+    },
+    {
+      "id": "example-second-project-task",
+      "code": "APP-1",
+      "type": "task",
+      "status": "todo",
+      "starred": true,
+      "project_id": "example-app",
+      "text": "Example starred task on a second project - replace with your own",
+      "created": "2026-01-10"
+    },
+    {
+      "id": "example-general-task",
+      "code": "GEN-1",
+      "type": "task",
+      "status": "todo",
+      "starred": false,
+      "project_id": "general",
+      "text": "Example task with no project - anything typed into the General add row lands here",
+      "created": "2026-01-09"
+    },
+    {
+      "id": "example-finished-task",
+      "code": "SITE-3",
+      "type": "task",
+      "status": "done",
+      "starred": false,
+      "project_id": "example-site",
+      "text": "Example finished task - marked done, so it shows on the Archive tab",
+      "created": "2026-01-08",
+      "verified_by": "dashboard/data/projects.json"
+    },
+    {
+      "id": "example-parked-idea",
+      "code": "IDEA-1",
+      "type": "idea",
+      "status": "parked",
+      "starred": false,
+      "project_id": "general",
+      "text": "Example idea - parked by default, kept in the same file, never shown on the Todo tab",
+      "created": "2026-01-07"
+    },
+    {
+      "id": "example-open-decision",
+      "code": "DEC-1",
+      "type": "decision",
+      "status": "open",
+      "starred": false,
+      "project_id": "example-app",
+      "text": "Example open decision - replace with a real call only you can make",
+      "created": "2026-01-06"
+    }
+  ]
 }
