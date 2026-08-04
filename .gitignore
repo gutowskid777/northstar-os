@@ -1,0 +1,37 @@
+# Secrets. Fail closed: deny broadly, allow back only the .example files.
+brain/credentials.md
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+
+# Real people. If you build anything contact-shaped on top of this, its data goes here and
+# never goes to a remote. Directory-level deny on purpose: a per-file list silently leaks the
+# next file someone adds.
+private/
+**/contacts.json
+**/interactions.json
+
+# Write-safety artifacts. serve.py backs up to <file>.bak and stages writes through <file>.tmp
+# before an atomic replace, so a crash mid-write can't truncate your queue to zero bytes.
+# Both are local recovery aids. Git history is the durable backup.
+*.bak
+*.tmp
+
+# Deleted things live here rather than being rm'd. Local only.
+_trash/
+
+# Scratch
+_scratch/
+_review/
+
+# System
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+
+# Node, if you add anything that needs it
+node_modules/

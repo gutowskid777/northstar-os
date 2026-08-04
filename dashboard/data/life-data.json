@@ -1,0 +1,119 @@
+[
+  {
+    "id": "LIFE-SECTION-INBOX",
+    "type": "section",
+    "text": "Inbox",
+    "format": "checklist",
+    "collapsed": false,
+    "created": "2026-01-02",
+    "children": [
+      {
+        "id": "LIFE-SUB-UI",
+        "type": "subsection",
+        "text": "Urgent + Important",
+        "format": "checklist",
+        "collapsed": false,
+        "created": "2026-01-02",
+        "children": []
+      },
+      {
+        "id": "LIFE-SUB-U",
+        "type": "subsection",
+        "text": "Urgent",
+        "format": "checklist",
+        "collapsed": false,
+        "created": "2026-01-02",
+        "children": []
+      },
+      {
+        "id": "LIFE-SUB-I",
+        "type": "subsection",
+        "text": "Important",
+        "format": "checklist",
+        "collapsed": false,
+        "created": "2026-01-02",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "LIFE-SEC-EXAMPLE",
+    "type": "section",
+    "text": "Example Section",
+    "format": "checklist",
+    "collapsed": false,
+    "created": "2026-01-03",
+    "children": [
+      {
+        "id": "LIFE-1",
+        "type": "item",
+        "text": "Example starred item - starring pins it to the Home tab",
+        "status": "todo",
+        "starred": true,
+        "format": "checklist",
+        "created": "2026-01-03",
+        "children": []
+      },
+      {
+        "id": "LIFE-2",
+        "type": "item",
+        "text": "Example finished item - it shows on the Archive tab",
+        "status": "done",
+        "starred": false,
+        "format": "checklist",
+        "created": "2026-01-03",
+        "children": []
+      },
+      {
+        "id": "LIFE-SUB-EXAMPLE",
+        "type": "subsection",
+        "text": "Example Subsection",
+        "format": "checklist",
+        "collapsed": false,
+        "created": "2026-01-03",
+        "children": [
+          {
+            "id": "LIFE-3",
+            "type": "item",
+            "text": "Example nested item - replace with your own",
+            "status": "todo",
+            "starred": true,
+            "format": "checklist",
+            "created": "2026-01-03",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "LIFE-SEC-NUMBERED",
+    "type": "section",
+    "text": "Example Numbered List",
+    "format": "numbered",
+    "collapsed": false,
+    "created": "2026-01-04",
+    "children": [
+      {
+        "id": "LIFE-4",
+        "type": "item",
+        "text": "First step - use the toolbar on the section header to switch format",
+        "status": "todo",
+        "starred": false,
+        "format": "numbered",
+        "created": "2026-01-04",
+        "children": []
+      },
+      {
+        "id": "LIFE-5",
+        "type": "item",
+        "text": "Second step - replace with your own",
+        "status": "todo",
+        "starred": false,
+        "format": "numbered",
+        "created": "2026-01-04",
+        "children": []
+      }
+    ]
+  }
+]

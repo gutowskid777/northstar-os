@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "what": "THE queue. Every ask, task, idea, and open decision lives here as a row. One file, so there is exactly one place to look and nothing can hide in a second list.",
+    "updated": "2026-01-15",
+    "how_to_add": "Every ask becomes a row IMMEDIATELY, never a prose note somewhere else. New rows use short human-slug ids (e.g. 'decide-launch-date') and keep the user's own words in 'verbatim'. Routing: doing-it-now or explicitly asked = task, someday-impulse = idea (parked by default), a call only the user can make = decision.",
+    "reconcile": "At session-end sync, diff the session's actual work against open rows, flip statuses, and set verified_by (a commit, a file path, or a URL). type:decision rows stay surfaced in Your Move until answered; rows past their 'expires' date force-close at the weekly review.",
+    "types": {
+      "task": "execution work. status: todo | doing | blocked | done | archived | killed",
+      "idea": "an improvement or new-build impulse. PARKED BY DEFAULT. status: parked | promoted | killed | done",
+      "decision": "a call only the user can make. status: open | answered | expired",
+      "reference": "a fact or link worth keeping. status: open | archived",
+      "bug": "something broken. status: todo | doing | done | killed"
+    },
+    "row_schema": {
+      "required": ["id", "type", "status"],
+      "id": "short human slug. The ONLY safe identifier. Never reuse one.",
+      "code": "PREFIX-N display label. NOT a safe identifier: a code freed by a clobber gets re-issued and then two rows share it.",
+      "optional": ["code", "project_id", "text", "created", "starred", "verbatim", "source", "score", "rationale", "next", "verified_by", "expires"]
+    },
+    "caps": "250 rows / 300,000 bytes, enforced by brain/tools/brain-guard.sh at commit time. Rotate at 90% of cap, not on a schedule.",
+    "rotation": "Move rows with a closed status dated before the current month to brain/history/queue-closed-YYYY-MM.json. Rotate, never delete.",
+    "count": 0
+  },
+  "items": []
+}

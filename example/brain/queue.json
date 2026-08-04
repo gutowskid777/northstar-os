@@ -1,0 +1,142 @@
+{
+  "_meta": {
+    "what": "EXAMPLE FILE — fictional. The real one is brain/queue.json. Note the ratio: more parked ideas than live tasks. That is the system working, not a backlog problem.",
+    "updated": "2026-01-15",
+    "how_to_add": "Every ask becomes a row IMMEDIATELY. Short human-slug ids, the user's own words in 'verbatim'.",
+    "count": 12
+  },
+  "items": [
+    {
+      "id": "fix-csv-import-errors",
+      "code": "TM-14",
+      "project_id": "trailmark",
+      "text": "CSV import failure shows 'Import failed' with no reason. Show which row broke and why.",
+      "type": "task",
+      "status": "doing",
+      "starred": true,
+      "created": "2026-01-14",
+      "verbatim": "three of six trials died right there and i only know because i watched one",
+      "next": "Map the four real failure cases from the logs, write a message for each"
+    },
+    {
+      "id": "northgate-january-invoice",
+      "code": "NG-3",
+      "project_id": "northgate",
+      "text": "Send the January invoice at the new $110 rate",
+      "type": "task",
+      "status": "todo",
+      "starred": true,
+      "created": "2026-01-13"
+    },
+    {
+      "id": "propose-northgate-retainer",
+      "code": "NG-4",
+      "project_id": "northgate",
+      "text": "Propose a two-day-a-week retainer to Jordan. Async, in writing, with a rate table.",
+      "type": "task",
+      "status": "todo",
+      "starred": true,
+      "created": "2026-01-13",
+      "next": "Draft it after the invoice goes out, so the rate is already anchored"
+    },
+    {
+      "id": "onboarding-first-trail-flow",
+      "code": "TM-15",
+      "project_id": "trailmark",
+      "text": "Cut signup-to-first-saved-trail under 5 minutes. Currently 11 with the import step.",
+      "type": "task",
+      "status": "todo",
+      "starred": false,
+      "created": "2026-01-09",
+      "rationale": "Goal #2. Import errors (TM-14) are the biggest single chunk of this."
+    },
+    {
+      "id": "chase-basil-handoff",
+      "code": "BC-2",
+      "project_id": "basil-co",
+      "text": "Chase Basil Co for the design handoff. Blocked on them since Jan 6.",
+      "type": "task",
+      "status": "blocked",
+      "starred": false,
+      "created": "2026-01-06",
+      "next": "Follow up Feb 3 if still nothing"
+    },
+    {
+      "id": "publish-first-blog-post",
+      "code": "BLOG-1",
+      "project_id": "trailmark-blog",
+      "text": "Publish the drafted post about route elevation data",
+      "type": "task",
+      "status": "todo",
+      "starred": false,
+      "created": "2026-01-04"
+    },
+    {
+      "id": "pricing-two-tier",
+      "code": "TM-11",
+      "project_id": "trailmark",
+      "text": "Collapse pricing from three tiers to two",
+      "type": "task",
+      "status": "done",
+      "starred": false,
+      "created": "2026-01-10",
+      "verified_by": "commit 4f2a91c, live on trailmark.app/pricing"
+    },
+    {
+      "id": "decide-free-tier",
+      "code": "TM-16",
+      "project_id": "trailmark",
+      "text": "Free tier, or trial only? Free brings signups but every free user is support load.",
+      "type": "decision",
+      "status": "open",
+      "starred": false,
+      "created": "2026-01-12",
+      "expires": "2026-02-15",
+      "rationale": "Blocks the landing page rewrite. Can't write the CTA until this is answered."
+    },
+    {
+      "id": "decide-drop-basil",
+      "code": "BC-3",
+      "project_id": "basil-co",
+      "text": "Keep waiting on Basil Co, or drop them and take the slot back?",
+      "type": "decision",
+      "status": "open",
+      "starred": false,
+      "created": "2026-01-14",
+      "expires": "2026-02-03"
+    },
+    {
+      "id": "idea-go-rewrite",
+      "code": "IDEA-4",
+      "project_id": "trailmark",
+      "text": "Rewrite the backend in Go",
+      "type": "idea",
+      "status": "parked",
+      "starred": false,
+      "created": "2026-01-03",
+      "rationale": "Parked on purpose. Serves no top-3 goal and gets tempting whenever real work stalls. See the standing caution in brain-state.md."
+    },
+    {
+      "id": "idea-mobile-app",
+      "code": "IDEA-5",
+      "project_id": "trailmark",
+      "text": "Native mobile app",
+      "type": "idea",
+      "status": "parked",
+      "starred": false,
+      "created": "2026-01-05",
+      "rationale": "Not until web onboarding stops leaking people. Building a second front door on a leaking one."
+    },
+    {
+      "id": "idea-strava-import",
+      "code": "IDEA-6",
+      "project_id": "trailmark",
+      "text": "Import from Strava instead of CSV",
+      "type": "idea",
+      "status": "parked",
+      "starred": false,
+      "created": "2026-01-14",
+      "rationale": "Genuinely good and would delete the whole import problem. Parked only because TM-14 ships this week and this is a two-week build. Reconsider at the next review."
+    }
+  ]
+}

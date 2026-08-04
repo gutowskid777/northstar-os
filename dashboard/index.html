@@ -1,0 +1,3744 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>northstar-os</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── TOKEN SYSTEM ─────────────────────────── */
+    :root {
+      --font: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --bg:         #FAFAF8;
+      --bg-2:       #F4F4F1;
+      --bg-3:       #EEEEEA;
+      --card:       #FFFFFF;
+      --card-2:     #F8F8F6;
+      --hover:      #F0F0EC;
+      --border:     #E2E2DD;
+      --border-sub: #ECECE8;
+      --t1: #111111;
+      --t2: #5F6368;
+      --t3: #8E9196;
+      --ink:    #111111;
+      --ink-fg: #FFFFFF;
+      --urge:   #E8590C;
+      --rc-green: #2F9E44;
+      --rc-blue:  #4C6EF5;
+      --rc-amber: #F59F00;
+      --rc-red:   #E8590C;
+      --rc-gray:  #C7C7C7;
+      --sh-xs: 0 1px 2px rgba(17,17,17,0.05), 0 0 0 1px rgba(17,17,17,0.04);
+      --sh-sm: 0 2px 8px rgba(17,17,17,0.07), 0 0 0 1px rgba(17,17,17,0.04);
+      --sh-md: 0 4px 16px rgba(17,17,17,0.10), 0 0 0 1px rgba(17,17,17,0.04);
+      --r:      14px;
+      --r-sm:   9px;
+      --r-xs:   6px;
+      --r-pill: 999px;
+      --orange: #D97757;
+      --blue:   #6A9BCC;
+      --olive:  #2F9E44;
+      --rust:   #E8590C;
+      --transition: 0.15s ease;
+    }
+
+    [data-theme="dark"] {
+      --bg:         #141412;
+      --bg-2:       #1A1A18;
+      --bg-3:       #202020;
+      --card:       #1E1E1C;
+      --card-2:     #242422;
+      --hover:      #2A2A28;
+      --border:     #2E2E2B;
+      --border-sub: #262624;
+      --t1: #D8D8D4;
+      --t2: #888884;
+      --t3: #5A5A58;
+      --ink:    #2E2E2B;
+      --ink-fg: #C8C8C4;
+      --sh-xs: 0 1px 2px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03);
+      --sh-sm: 0 2px 8px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+      --sh-md: 0 4px 16px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
+    }
+
+    [data-theme="light"] {
+      --bg:         #FAF9F5;
+      --bg-2:       #F0EEE9;
+      --bg-3:       #E8E5DE;
+      --card:       #FFFFFF;
+      --card-2:     #F5F3EE;
+      --hover:      #ECEAE4;
+      --border:     #E2DFD6;
+      --border-sub: #D8D4CB;
+      --t1: #26251F;
+      --t2: #6B6860;
+      --t3: #B0AEA5;
+      --ink:    #26251F;
+      --ink-fg: #FFFFFF;
+      --sh-xs: 0 1px 2px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
+      --sh-sm: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+      --sh-md: 0 4px 16px rgba(0,0,0,0.10), 0 0 0 1px rgba(0,0,0,0.04);
+    }
+
+    /* ── BASE ─────────────────────────────────── */
+    html { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--t1);
+      font-family: var(--font);
+      font-size: 13px;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* ── SIDEBAR ──────────────────────────────────── */
+    .sidebar {
+      width: 228px;
+      min-width: 228px;
+      background: var(--bg-2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 18px 10px 16px;
+      overflow: hidden;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .logo {
+      padding: 4px 10px 16px;
+      border-bottom: 1px solid var(--border-sub);
+      margin-bottom: 10px;
+    }
+    .logo-mark {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      line-height: 1.2;
+      color: var(--t1);
+    }
+    .logo-sub {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-top: 2px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 12px;
+      border-radius: var(--r-sm);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--t2);
+      cursor: pointer;
+      user-select: none;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: var(--font);
+      transition: background 0.12s, color 0.12s;
+    }
+    .nav-item:hover { background: var(--hover); color: var(--t1); }
+    .nav-item.active { background: var(--ink); color: var(--ink-fg); }
+
+    .nav-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .nav-count {
+      margin-left: auto;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--t3);
+    }
+    .nav-item.active .nav-count { color: rgba(255,255,255,0.5); }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--border-sub);
+      padding-top: 12px;
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Theme toggle */
+    .theme-btn {
+      width: 30px; height: 30px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--t3);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.12s, color 0.12s;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+    .theme-btn:hover { background: var(--hover); color: var(--t1); }
+    .theme-btn .icon-sun, .theme-btn .icon-moon { display: none; width: 14px; height: 14px; }
+    html:not([data-theme="dark"]) .theme-btn .icon-moon { display: block; }
+    [data-theme="dark"] .theme-btn .icon-sun { display: block; }
+
+    .user-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 10px;
+      border-radius: var(--r-sm);
+    }
+    .user-av {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--ink-fg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .user-name { font-size: 13px; font-weight: 600; color: var(--t1); }
+    .user-meta { font-size: 11px; color: var(--t3); margin-top: 1px; display: flex; align-items: center; gap: 4px; }
+    .server-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rc-gray); }
+    .server-dot.online { background: var(--rc-green); }
+    .server-dot.offline { background: var(--rc-red); }
+
+    /* ── MAIN ─────────────────────────────────── */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page { display: none; flex: 1; flex-direction: column; }
+    .page.active { display: flex; }
+
+    /* ── PAGE HEADER ──────────────────────────── */
+    .page-header {
+      padding: 20px 28px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .page-title {
+      font-family: var(--font);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--t2);
+      letter-spacing: 0.06em;
+    }
+
+    .page-title .slash { color: var(--t3); margin-right: 2px; }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .page-timestamp {
+      font-family: var(--font);
+      font-size: 9px;
+      color: var(--t3);
+      letter-spacing: 0.06em;
+    }
+
+    .reload-btn {
+      font-family: var(--font);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--t3);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: color var(--transition), border-color var(--transition);
+    }
+
+    .reload-btn:hover { color: var(--t2); border-color: var(--border-2); }
+
+    .page-body { padding: 24px 28px; flex: 1; }
+
+    /* ── STAT CARDS ───────────────────────────── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      box-shadow: var(--sh-sm);
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .stat-label {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 10px;
+    }
+
+    .stat-number {
+      font-family: var(--font);
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 1;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-sub {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--t3);
+      letter-spacing: 0.01em;
+    }
+
+    .stat-number.c-orange { color: var(--orange); }
+    .stat-number.c-blue   { color: var(--blue); }
+    .stat-number.c-olive  { color: var(--olive); }
+    .stat-number.c-rust   { color: var(--rust); }
+
+    /* ── KANBAN ───────────────────────────────── */
+    .section-eyebrow {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 14px;
+    }
+
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .kanban-col {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      min-height: 180px;
+      box-shadow: var(--sh-md);
+      transition: background var(--transition), border-color var(--transition), box-shadow 0.12s;
+    }
+    .kanban-col.kol-drag-over {
+      border-color: var(--ink);
+      box-shadow: 0 0 0 2px var(--ink), var(--sh-md);
+      background: var(--hover);
+    }
+    .kol-drop-hint { font-size: 11px; color: var(--t3); padding: 12px; text-align: center; }
+    .build-card[draggable="true"] { cursor: grab; }
+    .build-card[draggable="true"]:active { cursor: grabbing; }
+
+    .col-header {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .col-title {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .col-title.c-active  { color: var(--blue); }
+    .col-title.c-queue   { color: var(--orange); }
+    .col-title.c-paused  { color: var(--t3); }
+    .col-title.c-done    { color: var(--olive); }
+
+    .col-count {
+      font-family: var(--font);
+      font-size: 9px;
+      color: var(--t3);
+      background: var(--card-2);
+      padding: 2px 7px;
+      border-radius: 3px;
+    }
+
+    .col-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .build-card {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 11px 13px;
+      transition: border-color var(--transition);
+      cursor: default;
+    }
+
+    .build-card:hover { border-color: var(--border-2); }
+
+    .build-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--t1);
+      line-height: 1.35;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .build-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .build-pill {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+    }
+
+    .build-pill.active  { color: var(--blue);       background: var(--blue-dim); }
+    .build-pill.queue   { color: var(--orange);     background: var(--orange-dim); }
+    .build-pill.paused  { color: var(--mid-gray);   background: var(--mid-gray-dim); }
+    .build-pill.done    { color: var(--olive);      background: var(--olive-dim); }
+
+    .build-age {
+      font-family: var(--font);
+      font-size: 9px;
+      color: var(--t3);
+    }
+
+    .build-bar {
+      margin-top: 9px;
+      height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .build-bar-fill {
+      height: 100%;
+      border-radius: 1px;
+      transition: width 0.4s ease;
+    }
+
+    .build-bar-fill.inprogress { background: var(--blue); }
+    .build-bar-fill.done       { background: var(--olive); }
+    .build-bar-fill.failed     { background: var(--rust); }
+
+    .col-empty {
+      padding: 24px 14px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--t3);
+      font-style: italic;
+    }
+
+    /* 3-dot menu on build cards */
+    .build-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
+    .build-card-top .build-name { margin-bottom: 0; flex: 1; }
+    .build-menu-btn {
+      width: 20px; height: 20px; border-radius: 4px; border: none; background: none;
+      color: var(--t3); font-size: 14px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; transition: all var(--transition); line-height: 1;
+      padding: 0; margin-top: -1px;
+    }
+    .build-menu-btn:hover { background: var(--border); color: var(--t1); }
+    .build-dropdown {
+      position: fixed; z-index: 200;
+      background: var(--card); border: 1px solid var(--border-2);
+      border-radius: 7px; box-shadow: var(--sh-md);
+      min-width: 150px; overflow: hidden;
+    }
+    .build-dropdown-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; font-size: 11px; color: var(--t2);
+      cursor: pointer; transition: background var(--transition);
+      border: none; background: none; width: 100%; text-align: left;
+      font-family: var(--font);
+    }
+    .build-dropdown-item:hover { background: var(--hover); color: var(--t1); }
+    .build-dropdown-item.danger { color: var(--rust); }
+    .build-dropdown-item.danger:hover { background: rgba(192,57,43,0.07); }
+    .build-dropdown-divider { height: 1px; background: var(--border); margin: 2px 0; }
+
+    /* Combine modal */
+    .combine-modal-overlay {
+      position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .combine-modal {
+      background: var(--card); border: 1px solid var(--border-2); border-radius: 10px;
+      box-shadow: var(--sh-lg); width: 340px; max-height: 70vh; display: flex; flex-direction: column;
+    }
+    .combine-modal-header { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
+    .combine-modal-title { font-size: 13px; font-weight: 600; color: var(--t1); }
+    .combine-modal-sub { font-size: 10px; color: var(--t3); margin-top: 3px; }
+    .combine-modal-list { overflow-y: auto; flex: 1; padding: 6px; }
+    .combine-target-item {
+      display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 6px;
+      cursor: pointer; transition: background var(--transition); border: none; background: none;
+      width: 100%; text-align: left; font-family: var(--font);
+    }
+    .combine-target-item:hover { background: var(--hover); }
+    .combine-target-name { font-size: 12px; color: var(--t1); font-weight: 400; flex: 1; }
+    .combine-modal-footer { padding: 10px 16px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
+    .combine-cancel-btn {
+      font-size: 11px; padding: 6px 14px; border-radius: 5px; border: 1px solid var(--border);
+      background: var(--card-2); color: var(--t2); cursor: pointer; font-family: var(--font);
+      transition: all var(--transition);
+    }
+    .combine-cancel-btn:hover { border-color: var(--border-2); color: var(--t1); }
+
+    /* ── MASTER PLAN ─────────────────────────── */
+    .master-plan-section { margin-top: 0; }
+    .master-plan-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .master-plan-title {
+      font-size: 11px; font-weight: 700; color: var(--t2); letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .master-plan-hint { font-size: 10px; color: var(--t3); }
+    .master-plan-list { display: flex; flex-direction: column; gap: 4px; }
+    .master-plan-item {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 6px; padding: 9px 12px;
+      cursor: grab; transition: border-color var(--transition), box-shadow 0.1s;
+      user-select: none;
+    }
+    .master-plan-item:active { cursor: grabbing; }
+    .master-plan-item.mp-drag-over { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+    .master-plan-item.mp-dragging { opacity: 0.4; }
+    .master-plan-rank {
+      font-family: var(--font); font-size: 9px; font-weight: 700; color: var(--t3);
+      width: 16px; text-align: right; flex-shrink: 0;
+    }
+    .master-plan-drag { color: var(--border-2); font-size: 13px; flex-shrink: 0; cursor: grab; }
+    .master-plan-name { flex: 1; font-size: 12px; color: var(--t1); font-weight: 400; }
+    .master-plan-code {
+      font-family: var(--font); font-size: 8px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 2px 7px; border-radius: 3px; flex-shrink: 0;
+    }
+    .master-plan-unranked { opacity: 0.45; }
+
+    /* ── TODO PAGE ────────────────────────────── */
+    .todo-back-bar {
+      margin-bottom: 12px;
+    }
+    .todo-back-btn {
+      font-family: var(--font);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--t3);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: color var(--transition);
+    }
+    .todo-back-btn:hover { color: var(--orange); }
+
+    .todo-tab-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .todo-tab {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 11px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--t3);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .todo-tab:hover { color: var(--t2); border-color: var(--border-2); }
+
+    .todo-tab.active {
+      color: var(--ink-fg);
+      border-color: var(--ink);
+      background: var(--ink);
+    }
+
+
+    .todo-section {
+      margin-bottom: 32px;
+    }
+
+    .todo-section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .todo-section-title {
+      font-family: var(--font);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--t2);
+    }
+
+    .todo-section-code {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      color: var(--t3);
+    }
+
+    .todo-section-count {
+      font-family: var(--font);
+      font-size: 9px;
+      color: var(--t3);
+      margin-left: auto;
+    }
+
+    .todo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .todo-item:hover { border-color: var(--border-2); }
+
+    .todo-item.starred {
+      border-left: 3px solid var(--urge);
+      background: var(--hover);
+    }
+
+    .todo-item.starred .todo-item-code { color: var(--orange); }
+
+    .todo-focus-project {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      color: var(--t3);
+      flex-shrink: 0;
+      margin-right: 2px;
+    }
+
+    .todo-item.done {
+      opacity: 0.45;
+    }
+
+    .drag-handle {
+      color: var(--border-2);
+      cursor: grab;
+      font-size: 13px;
+      flex-shrink: 0;
+      padding: 0 4px 0 0;
+      line-height: 1;
+      transition: color var(--transition);
+      user-select: none;
+    }
+    .todo-item:hover .drag-handle { color: var(--t3); }
+    .todo-item { position: relative; }
+
+    /* Drag indicator: insert a full-width line in the gap using outline on a wrapper */
+    .todo-drop-zone {
+      position: relative;
+    }
+
+    .todo-drop-zone.drag-over::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      top: 0;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 10;
+      transform: translateY(-50%);
+    }
+
+    .todo-drop-sentinel {
+      height: 24px;
+      position: relative;
+    }
+    .todo-drop-sentinel.drag-over::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      top: 4px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    .todo-item-code {
+      font-family: var(--font);
+      font-size: 8px;
+      color: var(--t3);
+      min-width: 44px;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .todo-item-text {
+      flex: 1;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--t1);
+      line-height: 1.4;
+      outline: none;
+      border-radius: 3px;
+      padding: 1px 4px;
+      margin: -1px -4px;
+      transition: background var(--transition);
+    }
+
+    .todo-item-text:focus {
+      background: var(--card-2);
+      outline: 1px solid var(--border-2);
+    }
+
+    .todo-item.done .todo-item-text {
+      text-decoration: line-through;
+      color: var(--t3);
+    }
+
+    .todo-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .todo-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+      color: var(--t3);
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+
+    .todo-btn:hover { border-color: var(--border-2); color: var(--t2); }
+    .todo-btn.star:hover { color: var(--orange); border-color: var(--orange); }
+    .todo-btn.done-btn:hover { color: var(--olive); border-color: var(--olive); }
+    .todo-btn.archive-btn:hover { color: var(--rust); border-color: var(--rust); }
+
+    .todo-item.starred .todo-btn.star { color: var(--orange); }
+
+    /* Due date chip */
+    .todo-due-chip {
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      color: var(--t3);
+      background: var(--card-2);
+      cursor: pointer;
+      flex-shrink: 0;
+      white-space: nowrap;
+      transition: all var(--transition);
+      font-family: var(--font);
+    }
+    .todo-due-chip:hover { border-color: var(--border-2); color: var(--t2); }
+    .todo-due-chip.overdue { border-color: #c0392b44; color: var(--rust); background: rgba(192,57,43,0.07); }
+    .todo-due-chip.today { border-color: var(--orange); color: var(--orange); background: rgba(230,89,12,0.07); }
+    .todo-due-chip.soon { border-color: #d4a017aa; color: var(--t2); }
+    .todo-date-input-wrap { position: relative; flex-shrink: 0; }
+    .todo-date-input-wrap input[type=date] {
+      font-size: 10px; border: 1px solid var(--border-2); border-radius: 4px;
+      background: var(--card); color: var(--t1); padding: 2px 5px; cursor: pointer;
+      font-family: var(--font); outline: none;
+    }
+    .todo-date-btn {
+      font-size: 9px; padding: 2px 6px; border-radius: 99px; border: 1px dashed var(--border);
+      color: var(--t3); background: none; cursor: pointer; font-family: var(--font);
+      transition: all var(--transition);
+    }
+    .todo-date-btn:hover { border-color: var(--border-2); color: var(--t2); }
+
+    /* Due Today section */
+    .due-today-section {
+      background: rgba(230,89,12,0.06);
+      border: 1px solid rgba(230,89,12,0.25);
+      border-radius: var(--r-xs);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .due-today-header {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px; font-size: 11px; font-weight: 700;
+      color: var(--orange); border-bottom: 1px solid rgba(230,89,12,0.15);
+    }
+    .due-today-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+
+    .todo-empty {
+      padding: 20px 14px;
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--t3);
+      font-style: italic;
+      text-align: center;
+    }
+
+    .todo-add-row {
+      margin-top: 4px;
+      padding: 2px 0;
+    }
+
+    .todo-add-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px dashed var(--border);
+      padding: 6px 4px;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--t2);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .todo-add-input::placeholder { color: var(--t3); }
+    .todo-add-input:focus { border-bottom-color: var(--orange); }
+
+    .todo-badge {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1px 5px;
+      color: var(--t3);
+      margin-left: 4px;
+    }
+
+    /* ── LIFE TAB TREE ─── */
+    .life-section { margin-bottom: 16px; }
+    .life-section-header {
+      display: flex; align-items: center; gap: 9px;
+      padding: 10px 14px; border-radius: var(--r-sm);
+      cursor: pointer; transition: background 0.12s;
+      border: 1px solid var(--border); background: var(--card);
+      box-shadow: var(--sh-xs);
+    }
+    .life-section-header:hover { background: var(--hover); }
+    .life-chevron { font-size: 10px; color: var(--t3); flex-shrink: 0; }
+    .life-section-title { font-size: 13px; font-weight: 700; color: var(--t1); flex: 1; letter-spacing: -0.01em; }
+    .life-format-btns { display: flex; gap: 3px; }
+    .life-fmt-btn {
+      width: 24px; height: 24px; border-radius: 5px;
+      border: 1px solid transparent; background: none;
+      font-size: 11px; cursor: pointer; color: var(--t3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font); transition: background 0.1s, color 0.1s;
+    }
+    .life-fmt-btn:hover { background: var(--hover); color: var(--t1); }
+    .life-fmt-btn.active { background: var(--card-2); color: var(--t1); border-color: var(--border); }
+    .life-add-sub { font-size: 11px; color: var(--t3); background: none; border: none; cursor: pointer; padding: 3px 6px; font-family: var(--font); border-radius: 4px; transition: background 0.1s, color 0.1s; }
+    .life-add-sub:hover { color: var(--t2); background: var(--hover); }
+    .life-section-del { font-size: 14px; color: var(--t3); background: none; border: none; cursor: pointer; padding: 2px 5px; font-family: var(--font); border-radius: 4px; line-height: 1; transition: background 0.1s, color 0.1s; margin-left: 2px; }
+    .life-section-del:hover { color: var(--rc-red); background: rgba(232,89,12,0.08); }
+    .starred-life-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 10px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r-xs); margin-bottom: 5px; }
+    .starred-life-item.done-item .starred-life-text { text-decoration: line-through; color: var(--t3); }
+    .starred-life-star { color: #F59F00; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+    .starred-life-text { font-size: 13px; color: var(--t1); line-height: 1.4; }
+    .life-section-body { padding-left: 4px; padding-top: 6px; display: flex; flex-direction: column; gap: 2px; }
+    .life-subsection { margin-bottom: 6px; padding-left: 14px; border-left: 2px solid var(--border-sub); margin-left: 6px; }
+    .life-subsection-header {
+      display: flex; align-items: center; gap: 7px;
+      padding: 7px 12px; border-radius: var(--r-xs);
+      cursor: pointer; transition: background 0.12s;
+      background: var(--card-2); border: 1px solid var(--border-sub);
+    }
+    .life-subsection-header:hover { background: var(--hover); }
+    .life-subsection-title { font-size: 12px; font-weight: 600; color: var(--t2); flex: 1; }
+    .life-subsection-body { padding-left: 4px; padding-top: 4px; display: flex; flex-direction: column; gap: 2px; }
+    .life-add-item { font-size: 11px; color: var(--t3); background: none; border: none; cursor: pointer; padding: 5px 10px; font-family: var(--font); border-radius: 4px; transition: color 0.1s, background 0.1s; display: block; }
+    .life-add-item:hover { color: var(--t2); background: var(--hover); }
+    .life-inline-input {
+      width: 100%; padding: 6px 10px; border: 1px solid var(--border);
+      border-radius: var(--r-xs); font-size: 13px; font-family: var(--font);
+      background: var(--card); color: var(--t1); outline: none; margin-top: 4px;
+      box-sizing: border-box; transition: border-color 0.1s;
+    }
+    .life-inline-input:focus { border-color: var(--ink); }
+    .life-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 10px; border-radius: var(--r-xs);
+      transition: background 0.1s; cursor: default;
+      min-height: 34px;
+    }
+    .life-item:hover { background: var(--hover); }
+    .life-item-marker { flex-shrink: 0; }
+    .life-item-check {
+      width: 15px; height: 15px; border-radius: 4px;
+      border: 1.5px solid var(--border); background: var(--card);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s, border-color 0.1s; flex-shrink: 0;
+    }
+    .life-item-check.done { background: var(--ink); border-color: var(--ink); }
+    .life-item-check.done::after { content: '✓'; font-size: 9px; color: var(--ink-fg); }
+    .life-item-num { font-size: 12px; font-weight: 600; color: var(--t3); min-width: 18px; text-align: right; }
+    .life-item-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--t3); flex-shrink: 0; }
+    .life-item-text { font-size: 13px; color: var(--t1); line-height: 1.45; flex: 1; }
+    .life-item.done-item .life-item-text { opacity: 0.4; text-decoration: line-through; }
+    .life-item.starred-item .life-item-text { font-weight: 600; }
+    .life-item-actions { display: none; align-items: center; gap: 2px; flex-shrink: 0; }
+    .life-item:hover .life-item-actions { display: flex; }
+    .life-item-btn {
+      width: 24px; height: 24px; border-radius: 4px;
+      border: none; background: none; cursor: pointer;
+      font-size: 13px; color: var(--t3); display: flex;
+      align-items: center; justify-content: center;
+      transition: background 0.1s, color 0.1s; font-family: var(--font);
+    }
+    .life-item-btn:hover { background: var(--card-2); color: var(--t1); }
+    .life-item-btn.starred { color: #F59F00; }
+    .life-drag-handle { cursor: grab; color: var(--border); font-size: 14px; flex-shrink: 0; user-select: none; }
+    .life-item:hover .life-drag-handle { color: var(--t3); }
+
+    /* ── SKILLS PAGE ──────────────────────────── */
+    .skills-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tag-filter {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 11px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--t3);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .tag-filter:hover {
+      color: var(--t2);
+      border-color: var(--border-2);
+    }
+
+    .tag-filter.active {
+      color: var(--ink-fg);
+      border-color: var(--ink);
+      background: var(--ink);
+    }
+
+    .skills-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .skill-card:hover { border-color: var(--border-2); }
+
+    .skill-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .skill-name {
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--orange);
+      letter-spacing: 0.01em;
+    }
+
+    .skill-tags {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .skill-tag {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      color: var(--t3);
+    }
+
+    .skill-desc {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--t2);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .skill-footer {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .skill-trigger {
+      font-family: var(--font);
+      font-size: 10px;
+      color: var(--t1);
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      padding: 4px 9px;
+      border-radius: 4px;
+    }
+
+    .skill-also {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--t3);
+      font-style: italic;
+    }
+
+    /* ── HOW IT WORKS PAGE ───────────────────── */
+    .about-body {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .about-section {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .about-section-label {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-section-title {
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--t1);
+      line-height: 1.3;
+    }
+
+    .about-prose {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--t2);
+      line-height: 1.8;
+    }
+
+    .about-prose strong { color: var(--t1); font-weight: 500; }
+
+    .about-prose code, .about-flow-desc code {
+      font-family: var(--font);
+      font-size: 11px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1px 5px;
+      color: var(--orange);
+    }
+
+    .about-files {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .about-file-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .about-file-name {
+      font-family: var(--font);
+      font-size: 10px;
+      color: var(--orange);
+      margin-bottom: 6px;
+    }
+
+    .about-file-desc {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--t2);
+      line-height: 1.6;
+    }
+
+    /* ── WORKFLOW DIAGRAM ─────────────────────── */
+    .workflow-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .workflow-row {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      margin-bottom: 0;
+    }
+
+    .workflow-node {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 14px 16px;
+      position: relative;
+    }
+
+    .workflow-node-icon {
+      width: 28px; height: 28px;
+      border-radius: var(--r-xs);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .workflow-node-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--t1);
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+
+    .workflow-node-desc {
+      font-size: 11px;
+      color: var(--t2);
+      line-height: 1.55;
+      font-weight: 400;
+    }
+
+    .workflow-node-desc code {
+      font-family: var(--font);
+      background: var(--bg-2);
+      border-radius: 3px;
+      padding: 1px 4px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--t1);
+    }
+
+    .workflow-node-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      padding: 2px 6px;
+      margin-bottom: 8px;
+    }
+
+    .workflow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      flex-shrink: 0;
+      color: var(--t3);
+      font-size: 14px;
+      position: relative;
+    }
+
+    .workflow-arrow::before {
+      content: '→';
+    }
+
+    .workflow-vconnect {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 20px;
+      position: relative;
+      margin: 0 0 0 14px;
+    }
+
+    .workflow-vconnect::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: var(--border);
+      transform: translateX(-50%);
+    }
+
+    .workflow-vconnect::after {
+      content: '↓';
+      font-size: 11px;
+      color: var(--t3);
+      background: var(--bg);
+      padding: 0 2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* legacy — keep for Skills section */
+    .about-flow-content { display: flex; flex-direction: column; gap: 4px; padding-top: 3px; }
+    .about-flow-title { font-size: 12px; font-weight: 500; color: var(--t1); }
+    .about-flow-desc { font-size: 11px; font-weight: 300; color: var(--t2); line-height: 1.6; }
+
+    /* ── MEMORY PAGE ──────────────────────────── */
+    .memory-layout {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 14px;
+      height: calc(100vh - 130px);
+    }
+
+    .memory-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .mem-nav-label {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--t3);
+      padding: 0 10px;
+      margin-bottom: 6px;
+    }
+
+    .mem-item {
+      padding: 9px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--transition);
+    }
+
+    .mem-item:hover {
+      background: var(--card);
+      border-color: var(--border);
+    }
+
+    .mem-item.active {
+      background: var(--hover);
+      border-color: var(--ink);
+    }
+
+    .mem-item-name {
+      font-family: var(--font);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--t2);
+      margin-bottom: 2px;
+      letter-spacing: 0.02em;
+    }
+
+    .mem-item.active .mem-item-name { color: var(--t1); }
+
+    .mem-item-path {
+      font-family: var(--font);
+      font-size: 9px;
+      color: var(--t3);
+      letter-spacing: 0.01em;
+    }
+
+    .memory-viewer {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .viewer-header {
+      padding: 11px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .viewer-path {
+      font-family: var(--font);
+      font-size: 9px;
+      color: var(--t3);
+      letter-spacing: 0.04em;
+    }
+
+    .viewer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 20px;
+    }
+
+    .viewer-content {
+      font-family: var(--font);
+      font-size: 11px;
+      line-height: 1.8;
+      color: var(--t2);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .viewer-empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--t3);
+      font-style: italic;
+    }
+
+    /* ── ERROR STATE ──────────────────────────── */
+    .error-state {
+      padding: 16px 18px;
+      background: var(--rust-dim);
+      border: 1px solid rgba(193,95,60,0.2);
+      border-radius: 8px;
+      color: var(--rust);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .error-state code {
+      font-family: var(--font);
+      font-size: 10px;
+      background: var(--card-2);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    /* ── TOAST ───────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.ok   { color: var(--olive); background: var(--olive-dim); border-color: rgba(120,140,93,0.3); }
+    .toast.err  { color: var(--rust);  background: var(--rust-dim);  border-color: rgba(193,95,60,0.3); }
+
+    /* ── SCROLLBAR ────────────────────────────── */
+    ::-webkit-scrollbar { width: 3px; height: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 2px; }
+
+    /* ── MORNING BRIEF / HOME ─── */
+    .brief-section { margin-bottom: 28px; }
+    .brief-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--t3); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border-sub); display: flex; align-items: center; gap: 6px; }
+    .brief-inbox-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    /* News category */
+    .brief-news-cat { background: var(--card); border: 1px solid var(--border); border-radius: var(--r-sm); overflow: hidden; margin-bottom: 8px; }
+    .brief-news-cat-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px 8px; }
+    .brief-news-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .brief-news-cat-name { font-size: 12px; font-weight: 700; color: var(--t1); flex: 1; }
+    .brief-news-more {
+      padding: 2px 9px; border-radius: var(--r-pill);
+      font-size: 11px; font-weight: 600; color: var(--t3);
+      background: var(--card-2); border: 1px solid var(--border);
+      cursor: pointer; font-family: var(--font); white-space: nowrap;
+      transition: background 0.1s, color 0.1s; margin-left: auto;
+    }
+    .brief-news-more:hover { background: var(--hover); color: var(--t2); }
+    .brief-news-cat-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px 8px; }
+    .brief-news-preview { padding: 0 14px 10px; }
+    .brief-news-rest { padding: 4px 14px 10px; border-top: 1px solid var(--border-sub); }
+    .brief-move-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 16px 18px; box-shadow: var(--sh-xs); }
+    .brief-chips-row { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+    .brief-chip { padding: 3px 10px; border-radius: var(--r-pill); font-size: 11px; font-weight: 600; background: var(--card-2); border: 1px solid var(--border); color: var(--t2); }
+    .brief-chip.overdue { background: rgba(232,89,12,0.1); color: var(--urge); border-color: rgba(232,89,12,0.2); }
+    .brief-empty { font-size: 13px; color: var(--t3); text-align: center; padding: 24px; }
+    .brief-health-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .brief-health-chip { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--r-xs); background: var(--card); border: 1px solid var(--border); box-shadow: var(--sh-xs); }
+    .brief-health-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .brief-health-label { font-size: 11px; color: var(--t3); }
+    .brief-health-score { font-size: 13px; font-weight: 700; color: var(--t1); }
+    .brief-inbox-row { margin-bottom: 10px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r-xs); overflow: hidden; }
+    .brief-inbox-row-header { display: flex; align-items: center; gap: 7px; padding: 9px 14px 8px; font-size: 12px; font-weight: 600; color: var(--t2); border-bottom: 1px solid var(--border-sub); }
+    .brief-inbox-count { background: var(--rc-red); color: #fff; font-size: 10px; font-weight: 700; border-radius: 99px; padding: 1px 5px; line-height: 1.4; margin-left: auto; }
+    .brief-inbox-row-body { padding: 6px 14px 10px; }
+    .brief-email-item { padding: 8px 0; border-bottom: 1px solid var(--border-sub); }
+    .brief-email-item:last-child { border-bottom: none; }
+    .brief-email-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1px; }
+    .brief-email-sender { font-size: 12px; font-weight: 700; color: var(--t1); }
+    .brief-email-pin { background: none; border: none; cursor: pointer; font-size: 13px; opacity: 0.4; padding: 0 2px; line-height: 1; transition: opacity 0.12s; flex-shrink: 0; }
+    .brief-email-pin:hover { opacity: 1; }
+    .brief-email-subject { font-size: 12px; color: var(--t2); margin-bottom: 2px; }
+    .brief-email-summary { font-size: 11px; color: var(--t3); }
+    .brief-news-item { padding: 8px 0; border-bottom: 1px solid var(--border-sub); }
+    .brief-news-item:last-child { border-bottom: none; }
+    .brief-news-headline { font-size: 13px; font-weight: 600; color: var(--t1); margin-bottom: 2px; }
+    .brief-news-summary { font-size: 12px; color: var(--t2); }
+    .brief-news-source { font-size: 11px; color: var(--t3); margin-top: 2px; }
+    .brief-edge-item { padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r-xs); margin-bottom: 6px; cursor: pointer; }
+    .brief-edge-item:hover { background: var(--hover); }
+    .brief-edge-name { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 2px; }
+    .brief-edge-what { font-size: 12px; color: var(--t2); }
+    .brief-edge-why { font-size: 12px; color: var(--t3); font-style: italic; margin-top: 2px; }
+    .brief-edge-howto { display: none; font-size: 12px; color: var(--t2); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-sub); line-height: 1.6; }
+    /* Events */
+    .brief-event-item { padding: 11px 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r-xs); margin-bottom: 6px; }
+    .brief-event-top { display: flex; align-items: center; gap: 7px; margin-bottom: 3px; }
+    .brief-event-chip { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 7px; border-radius: var(--r-pill); flex-shrink: 0; }
+    .brief-event-title { font-size: 13px; font-weight: 700; color: var(--t1); line-height: 1.25; }
+    .brief-event-meta { font-size: 12px; color: var(--t2); font-weight: 600; margin-bottom: 2px; }
+    .brief-event-why { font-size: 12px; color: var(--rc-green); font-style: italic; }
+    .brief-event-link { font-size: 11px; color: var(--t3); text-decoration: none; margin-top: 4px; display: inline-block; }
+    .brief-event-link:hover { color: var(--t2); text-decoration: underline; }
+    .brief-event-rest { display: none; }
+    .brief-event-more { font-size: 11px; font-weight: 600; color: var(--t3); background: none; border: none; cursor: pointer; padding: 4px 0; font-family: var(--font); }
+    .brief-event-more:hover { color: var(--t2); }
+    .page-chips { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+    .page-title-block { display: flex; flex-direction: column; }
+  </style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">northstar-os</div>
+    <div class="logo-sub">Personal Dashboard</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <button class="nav-item active" onclick="showPage('home', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 6.5L8 2l6 4.5V14a1 1 0 01-1 1H3a1 1 0 01-1-1V6.5z"/>
+        <path d="M6 15V9h4v6"/>
+      </svg>
+      <span>Home</span>
+    </button>
+    <button class="nav-item" onclick="showPage('projects', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 4h12M2 8h12M2 12h6"/>
+        <circle cx="13" cy="12" r="2"/>
+        <path d="M13 10v0M13 14v0" stroke-width="1.2"/>
+      </svg>
+      <span>Builds</span>
+    </button>
+    <button class="nav-item" onclick="showPage('todo', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 8l2 2 4-4"/>
+        <rect x="1.5" y="1.5" width="13" height="13" rx="2"/>
+      </svg>
+      <span>Todo</span>
+    </button>
+    <button class="nav-item" onclick="showPage('life', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 14s-6-3.5-6-7.5A3.5 3.5 0 018 3a3.5 3.5 0 016 3.5C14 10.5 8 14 8 14z"/>
+      </svg>
+      <span>Life</span>
+    </button>
+    <button class="nav-item" onclick="showPage('archive', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1.5" y="3" width="13" height="2.5" rx="1"/>
+        <path d="M2.5 5.5v7a1 1 0 001 1h9a1 1 0 001-1v-7"/>
+        <path d="M6.5 8.5h3"/>
+      </svg>
+      <span>Archive</span>
+    </button>
+    <button class="nav-item" onclick="showPage('how', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="8" cy="8" r="6.5"/>
+        <path d="M8 11.5v.5"/>
+        <path d="M8 9.5c0-1.5 2-1.5 2-3a2 2 0 10-4 0"/>
+      </svg>
+      <span>How It Works</span>
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-row">
+      <div class="user-av">YN</div>
+      <div>
+        <div class="user-name">Your Name</div>
+        <div class="user-meta"><span class="server-dot" id="server-dot"></span><span id="server-label">checking...</span></div>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="7" cy="7" r="2.5"/>
+          <path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.9 2.9l1.1 1.1M10 10l1.1 1.1M10 4l1.1-1.1M2.9 11.1L4 10"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.25 7.46A5.25 5.25 0 1 1 6.54 1.75 4.08 4.08 0 0 0 12.25 7.46z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ── HOME / MORNING BRIEF ─────────────── -->
+  <div class="page active" id="page-home">
+    <div class="page-header">
+      <div class="page-title-block">
+        <div class="page-title" id="brief-date">Loading...</div>
+        <div class="page-chips" id="brief-chips"></div>
+      </div>
+      <div class="header-right">
+        <button onclick="loadMorningBrief()" style="padding:5px 11px;border-radius:var(--r-xs);border:1px solid var(--border);background:none;font-size:11px;font-weight:600;font-family:var(--font);color:var(--t3);cursor:pointer;" onmouseover="this.style.background='var(--hover)'" onmouseout="this.style.background='none'">&#8635; Refresh</button>
+      </div>
+    </div>
+    <div class="page-body" style="overflow-y:auto;">
+
+      <!-- QUEUE HEALTH -->
+      <div class="brief-section" id="section-health">
+        <div class="brief-section-label">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2F9E44" stroke-width="2" stroke-linecap="round"><polyline points="1,10 5,5 9,8 15,2"/></svg>
+          Queue Health
+        </div>
+        <div class="brief-health-grid" id="health-grid">
+          <div class="brief-empty" style="padding:8px 0">Computing...</div>
+        </div>
+      </div>
+
+      <!-- TODAY'S FOCUS -->
+      <div class="brief-section" id="section-move">
+        <div class="brief-section-label">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#4C6EF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.5"/><circle cx="8" cy="8" r="2.5"/></svg>
+          Today's Focus
+        </div>
+        <div id="move-card" class="brief-move-card">
+          <div class="brief-empty">Loading...</div>
+        </div>
+      </div>
+
+      <!-- INBOX -->
+      <div class="brief-section" id="section-inbox">
+        <div class="brief-section-label">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#E8590C" stroke-width="2" stroke-linecap="round"><rect x="1" y="3" width="14" height="10" rx="1.5"/><polyline points="1,4 8,9 15,4"/></svg>
+          Inbox <span id="inbox-total-badge" style="display:none;margin-left:4px;background:var(--rc-red);color:#fff;font-size:10px;font-weight:700;border-radius:99px;padding:1px 6px;line-height:1.4"></span>
+        </div>
+        <div class="brief-inbox-row" id="inbox-ui">
+          <div class="brief-inbox-row-header">
+            <span class="brief-inbox-dot" style="background:#E8590C"></span>
+            <span>Urgent + Important</span>
+            <span class="brief-inbox-count" id="inbox-ui-count" style="display:none"></span>
+          </div>
+          <div class="brief-inbox-row-body" id="inbox-ui-body"></div>
+        </div>
+        <div class="brief-inbox-row" id="inbox-u">
+          <div class="brief-inbox-row-header">
+            <span class="brief-inbox-dot" style="background:#F59F00"></span>
+            <span>Urgent</span>
+            <span class="brief-inbox-count" id="inbox-u-count" style="display:none"></span>
+          </div>
+          <div class="brief-inbox-row-body" id="inbox-u-body"></div>
+        </div>
+        <div class="brief-inbox-row" id="inbox-i">
+          <div class="brief-inbox-row-header">
+            <span class="brief-inbox-dot" style="background:#4C6EF5"></span>
+            <span>Important</span>
+            <span class="brief-inbox-count" id="inbox-i-count" style="display:none"></span>
+          </div>
+          <div class="brief-inbox-row-body" id="inbox-i-body"></div>
+        </div>
+      </div>
+
+      <!-- NEWS (categories come from data/morning-brief.json -> news.categories) -->
+      <div class="brief-section" id="section-news">
+        <div class="brief-section-label">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888884" stroke-width="2" stroke-linecap="round"><rect x="1" y="2" width="14" height="12" rx="1.5"/><line x1="4" y1="6" x2="12" y2="6"/><line x1="4" y1="9" x2="12" y2="9"/><line x1="4" y1="12" x2="8" y2="12"/></svg>
+          News
+        </div>
+        <div id="news-cats"></div>
+      </div>
+
+      <!-- EVENTS (categories come from data/morning-brief.json -> events.categories) -->
+      <div class="brief-section" id="section-events">
+        <div class="brief-section-label">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#E8590C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="11.5" rx="1.5"/><path d="M1.5 6.5h13M5 1.5V4M11 1.5V4"/></svg>
+          Events
+        </div>
+        <div id="events-list"><div class="brief-empty" style="font-size:11px">Loading...</div></div>
+      </div>
+
+      <!-- STARRED LIFE ITEMS -->
+      <div class="brief-section" id="section-starred-life">
+        <div class="brief-section-label">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#F59F00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="8,1.5 10.1,6 15,6.5 11.5,10 12.5,14.5 8,12 3.5,14.5 4.5,10 1,6.5 5.9,6"/></svg>
+          Starred
+        </div>
+        <div id="starred-life-list"><div class="brief-empty" style="font-size:11px">Loading...</div></div>
+      </div>
+
+      <!-- EDGE -->
+      <div class="brief-section" id="section-edge">
+        <div class="brief-section-label">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#2F9E44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,1 1,9 7,9 7,15 15,7 9,7"/></svg>
+          Edge
+        </div>
+        <div id="edge-list"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── PROJECTS ──────────────────────────── -->
+  <div class="page" id="page-projects">
+    <div class="page-header">
+      <span class="page-title"><span class="slash">//</span> Builds</span>
+      <div class="header-right">
+        <span class="page-timestamp" id="build-ts"></span>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-label">Active</div>
+          <div class="stat-number c-blue" id="stat-active">—</div>
+          <div class="stat-sub">in progress</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Queue</div>
+          <div class="stat-number c-orange" id="stat-queue">—</div>
+          <div class="stat-sub">up next</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Paused</div>
+          <div class="stat-number" style="color:var(--mid-gray)" id="stat-paused">—</div>
+          <div class="stat-sub">on hold</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Done</div>
+          <div class="stat-number c-olive" id="stat-done">—</div>
+          <div class="stat-sub">completed</div>
+        </div>
+      </div>
+      <div id="kanban-wrap"></div>
+      <div id="master-plan-wrap" style="margin-top:28px;"></div>
+    </div>
+  </div>
+
+  <!-- ── TODO ─────────────────────────────────── -->
+  <div class="page" id="page-todo">
+    <div class="page-header">
+      <span class="page-title"><span class="slash">//</span> Todo</span>
+      <div class="header-right">
+        <span class="page-timestamp" id="todo-ts"></span>
+      </div>
+    </div>
+    <div class="page-body">
+      <div id="todo-wrap"></div>
+    </div>
+  </div>
+
+  <!-- ── LIFE ──────────────────────────────────── -->
+  <div class="page" id="page-life">
+    <div class="page-header">
+      <span class="page-title"><span class="slash">//</span> Life</span>
+      <div class="header-right">
+        <span class="page-timestamp" id="life-ts"></span>
+      </div>
+    </div>
+    <div class="page-body">
+      <div id="life-wrap">
+        <div id="life-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ARCHIVE ───────────────────────────────── -->
+  <div class="page" id="page-archive">
+    <div class="page-header">
+      <span class="page-title"><span class="slash">//</span> Archive</span>
+      <div class="header-right">
+      </div>
+    </div>
+    <div class="page-body">
+      <div id="archive-wrap"></div>
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ─────────────────────────── -->
+  <div class="page" id="page-how">
+    <div class="page-header">
+      <span class="page-title"><span class="slash">//</span> How It Works</span>
+    </div>
+    <div class="page-body">
+      <div class="about-body">
+
+        <div class="about-section">
+          <div class="about-section-label">Overview</div>
+          <div class="about-section-title">One page, six tabs, plain JSON underneath.</div>
+          <div class="about-prose">
+            This is a personal dashboard you run on your own machine. The whole interface is a single
+            HTML file with no framework, no bundler, and no build step. Everything you see is read from
+            plain JSON files in <code>dashboard/data/</code>, and everything you change is written straight
+            back to them. Nothing leaves your computer.
+          </div>
+        </div>
+
+        <div class="about-section">
+          <div class="about-section-label">The Tabs</div>
+          <div class="about-section-title">What each view is for.</div>
+          <div class="about-files">
+            <div class="about-file-card">
+              <div class="about-file-name">Home</div>
+              <div class="about-file-desc">Your daily brief. Queue Health (four chips computed from the queue), Today's Focus (your top starred task), inbox triage, news, events, starred Life items, and Edge notes. Everything except the two computed blocks comes from <code>morning-brief.json</code>.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">Builds</div>
+              <div class="about-file-desc">Every project in four columns: Active / Queue / Paused / Done. Drag a card between columns, or click its code pill to cycle status. Click a card to jump to that project's todos. The Master Build Order list below is drag-to-reprioritize.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">Todo</div>
+              <div class="about-file-desc">Opens on <strong>Focus</strong> — starred items only. Sub-tabs: Focus | All | one per project. Drag to reorder, &#9733; to star, &#10003; to mark done, &#10005; to archive. Type in the add row to create an item.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">Life</div>
+              <div class="about-file-desc">A nested outline for everything that is not a build: sections, subsections, and items. Each section renders as a checklist, a numbered list, or bullets. Star an item and it shows up on Home.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">Archive</div>
+              <div class="about-file-desc">Done and archived rows from both the queue and Life. Read-only history with a restore button. Nothing is ever hard-deleted.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">How It Works</div>
+              <div class="about-file-desc">This page, plus the skills list below.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-section">
+          <div class="about-section-label">Data Layer</div>
+          <div class="about-section-title">Six files in <code>dashboard/data/</code>.</div>
+          <div class="about-prose">
+            Edit them by hand, generate them with a script, or let the dashboard write them for you.
+            They are ordinary JSON &mdash; nothing is encoded, hashed, or migrated.
+          </div>
+          <div class="about-files">
+            <div class="about-file-card">
+              <div class="about-file-name">projects.json</div>
+              <div class="about-file-desc">An array of projects: <code>id</code>, <code>code</code>, <code>name</code>, <code>status</code>, <code>stack</code>, <code>next_actions</code>. Status is one of <strong>active / queue / paused / done</strong>.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">queue.json</div>
+              <div class="about-file-desc">One queue for everything: <code>{ "_meta": {...}, "items": [...] }</code>. Each row has a <code>type</code> of <code>task</code>, <code>idea</code>, or <code>decision</code>. The Todo tab renders only tasks, but writes preserve every row, so ideas and decisions can never be dropped by a save.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">life-data.json</div>
+              <div class="about-file-desc">A tree of sections, subsections, and items. Keep the three inbox subsections &mdash; <code>LIFE-SUB-UI</code>, <code>LIFE-SUB-U</code>, <code>LIFE-SUB-I</code> &mdash; if you want the pin button on Home's inbox rows to work; that is where pinned emails land.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">morning-brief.json</div>
+              <div class="about-file-desc">Everything on Home that is not computed: <code>inbox</code>, <code>news</code>, <code>edge</code>, <code>events</code>. News and event categories are declared in the file itself, so you add a category by adding data &mdash; not by editing HTML.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">build-order.json</div>
+              <div class="about-file-desc">A flat array of project ids. Drives the Master Build Order ranking on the Builds tab.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">skills-index.json</div>
+              <div class="about-file-desc">The list rendered at the bottom of this page. Use it to document whatever automations you point at this dashboard.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-section">
+          <div class="about-section-label">Daily Workflow</div>
+          <div class="about-section-title">How to actually use this.</div>
+
+          <div class="workflow-diagram">
+
+            <div class="workflow-row">
+              <div class="workflow-node">
+                <div class="workflow-node-badge" style="background:rgba(76,110,245,0.12);color:#4C6EF5">Morning</div>
+                <div class="workflow-node-icon" style="background:rgba(76,110,245,0.10)">&#9728;&#65039;</div>
+                <div class="workflow-node-title">Open Home</div>
+                <div class="workflow-node-desc">Queue Health tells you whether the backlog is under control. Today's Focus names the one thing to do first. Below that: inbox, news, events.</div>
+              </div>
+              <div class="workflow-arrow"></div>
+              <div class="workflow-node">
+                <div class="workflow-node-badge" style="background:rgba(47,158,68,0.1);color:#2F9E44">Focus</div>
+                <div class="workflow-node-icon" style="background:rgba(47,158,68,0.1)">&#11088;</div>
+                <div class="workflow-node-title">Star three things</div>
+                <div class="workflow-node-desc">The Todo tab opens on Focus, which shows starred rows only. Star what you are actually working on today; everything else stays queued and out of sight.</div>
+              </div>
+              <div class="workflow-arrow"></div>
+              <div class="workflow-node">
+                <div class="workflow-node-badge" style="background:rgba(17,17,17,0.07);color:var(--t2)">Cleanup</div>
+                <div class="workflow-node-icon" style="background:rgba(17,17,17,0.06)">&#128451;&#65039;</div>
+                <div class="workflow-node-title">Archive aggressively</div>
+                <div class="workflow-node-desc">&#10005; archives, it never deletes &mdash; the row moves to the Archive tab and can be restored. A long open list is just noise.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="about-section">
+          <div class="about-section-label">Skills</div>
+          <div class="about-section-title">The input layer &mdash; how data gets in.</div>
+          <div class="about-prose" style="margin-bottom:16px;">
+            This list is just <code>skills-index.json</code>. Document your own scripts, agents, or shortcuts here
+            so the dashboard explains itself to future you. Editing the file is the only step.
+          </div>
+          <div class="skills-toolbar" id="tag-bar"></div>
+          <div class="skills-list" id="skills-list"></div>
+        </div>
+
+        <div class="about-section">
+          <div class="about-section-label">Server</div>
+          <div class="about-section-title">Zero dependencies. Localhost only.</div>
+          <div class="about-prose">
+            <code>serve.py</code> is pure Python standard library &mdash; no web framework, no pip install, no virtualenv.
+            If you have Python 3, you can run it. It serves this page and exposes a small
+            <code>/api/*</code> surface that reads and writes <code>dashboard/data/</code>. Writes are atomic and keep
+            a <code>.bak</code> of the previous version, so a crash mid-save cannot truncate your queue.
+          </div>
+          <div class="about-files">
+            <div class="about-file-card">
+              <div class="about-file-name">python3 serve.py</div>
+              <div class="about-file-desc">Run it from the repository root. Defaults to <strong>http://127.0.0.1:8000</strong>; override with <code>PORT=8123 python3 serve.py</code>. Without it running, the page still loads but every change is lost on refresh.</div>
+            </div>
+            <div class="about-file-card">
+              <div class="about-file-name">Do not port-forward it</div>
+              <div class="about-file-desc">It binds <code>127.0.0.1</code> and has <strong>no authentication</strong>, on purpose &mdash; it is a single-user tool on your own machine. Anyone who can reach the port can read and overwrite all of your data. Do not expose it to your Wi-Fi, a tunnel, or a container port map.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── API ROUTES ────────────────────────────────
+  // Every server path the dashboard touches lives here. serve.py owns the other half
+  // of this contract; nothing outside dashboard/data/ is reachable through it.
+  const API = {
+    projects:       '/api/projects',
+    queue:          '/api/queue',
+    life:           '/api/life',
+    brief:          '/api/brief',
+    buildOrder:     '/api/build-order',
+    skills:         '/api/skills',
+    health:         '/api/health',
+    archiveProject: '/api/archive-project'
+  };
+
+  // ── Theme ─────────────────────────────────────
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  }
+
+  // ── Navigation ────────────────────────────────
+  function showPage(name, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    btn.classList.add('active');
+    const loaders = { home: loadMorningBrief, projects: loadProjects, todo: loadTodo, life: loadLife, archive: loadArchive, how: loadSkills };
+    loaders[name]?.();
+  }
+
+  // ── Utils ─────────────────────────────────────
+  async function fetchJSON(p) {
+    const r = await fetch(p + '?_=' + Date.now());
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }
+  async function fetchText(p) {
+    const r = await fetch(p);
+    if (!r.ok) throw new Error(r.status);
+    return r.text();
+  }
+  function daysSince(d) {
+    if (!d) return '—';
+    const n = Math.floor((Date.now() - new Date(d)) / 86400000);
+    return n === 0 ? 'today' : n + 'd';
+  }
+  function now() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // ── PROJECTS ──────────────────────────────────
+  const STATUS_CYCLE = { active: 'queue', queue: 'paused', paused: 'done', done: 'active' };
+  let _dragProjectId = null, _dragProjectMoved = false;
+
+  function onProjectDragStart(e, id) {
+    _dragProjectId = id;
+    _dragProjectMoved = false;
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => { _dragProjectMoved = true; }, 80);
+  }
+
+  async function onProjectDrop(e, newStatus) {
+    e.preventDefault();
+    document.querySelectorAll('.kol-drag-over').forEach(c => c.classList.remove('kol-drag-over'));
+    if (!_dragProjectId) return;
+    const id = _dragProjectId;
+    _dragProjectId = null;
+    await ensureProjectCache();
+    const p = _projectCache.find(p => p.id === id);
+    if (!p || p.status === newStatus) return;
+    p.status = newStatus;
+    p.last_updated = new Date().toISOString().slice(0, 10);
+    try {
+      await fetch(API.projects, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ id, status: newStatus }) });
+    } catch(err) {}
+    loadProjects();
+  }
+
+  async function cycleProjectStatus(projectId) {
+    await ensureProjectCache();
+    const p = _projectCache.find(p => p.id === projectId);
+    if (!p) return;
+    p.status = STATUS_CYCLE[p.status] || 'queue';
+    p.last_updated = new Date().toISOString().slice(0, 10);
+    // Try server; re-render either way
+    try {
+      await fetch(API.projects, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: projectId, status: p.status })
+      });
+    } catch(e) { /* server not running — change lives for this session */ }
+    loadProjects();
+  }
+
+  async function loadProjects() {
+    document.getElementById('build-ts').textContent = now();
+    try {
+      const [projects, rawTodos] = await Promise.all([
+        fetchJSON(API.projects),
+        fetchTodoItems().catch(() => [])
+      ]);
+      _projectCache = projects;
+      const allTodos = rawTodos;
+      // Count open todos, grab first open todo text, and track most recent todo date per project
+      const todoCounts = {};
+      const firstTodo = {};
+      const lastActivity = {};
+      allTodos.filter(t => t.status === 'todo').forEach(t => {
+        todoCounts[t.project_id] = (todoCounts[t.project_id] || 0) + 1;
+        if (!firstTodo[t.project_id]) firstTodo[t.project_id] = t.text;
+      });
+      allTodos.forEach(t => {
+        const d = t.created || '';
+        if (!lastActivity[t.project_id] || d > lastActivity[t.project_id]) {
+          lastActivity[t.project_id] = d;
+        }
+      });
+
+      const groups = { active: [], queue: [], paused: [], done: [] };
+      projects.filter(p => !p.archived).forEach(p => { (groups[p.status] || groups.queue).push(p); });
+      // Sort each column: most recently updated first
+      Object.values(groups).forEach(arr => arr.sort((a,b) => (b.last_updated||'').localeCompare(a.last_updated||'')));
+
+      document.getElementById('stat-active').textContent = groups.active.length;
+      document.getElementById('stat-queue').textContent  = groups.queue.length;
+      document.getElementById('stat-paused').textContent = groups.paused.length;
+      document.getElementById('stat-done').textContent   = groups.done.length;
+
+      const cols = [
+        { key: 'active', label: 'Active', cls: 'c-active', items: groups.active },
+        { key: 'queue',  label: 'Queue',  cls: 'c-queue',  items: groups.queue },
+        { key: 'paused', label: 'Paused', cls: 'c-paused', items: groups.paused },
+        { key: 'done',   label: 'Done',   cls: 'c-done',   items: groups.done },
+      ];
+
+      loadMasterPlan();
+
+      document.getElementById('kanban-wrap').innerHTML = `
+        <div class="section-eyebrow">All Builds</div>
+        <div class="kanban">
+          ${cols.map(col => `
+            <div class="kanban-col"
+                 ondragover="event.preventDefault();event.currentTarget.classList.add('kol-drag-over')"
+                 ondragleave="event.currentTarget.classList.remove('kol-drag-over')"
+                 ondrop="onProjectDrop(event,'${col.key}')">
+              <div class="col-header">
+                <span class="col-title ${col.cls}">${col.label}</span>
+                <span class="col-count">${col.items.length}</span>
+              </div>
+              <div class="col-body">
+                ${col.items.length
+                  ? col.items.map(p => projectCard(p, todoCounts[p.id] || 0, firstTodo[p.id] || null, lastActivity[p.id] || null)).join('')
+                  : '<div class="col-empty kol-drop-hint">Drop here</div>'}
+              </div>
+            </div>`).join('')}
+        </div>`;
+    } catch(e) {
+      document.getElementById('kanban-wrap').innerHTML = `
+        <div class="error-state">
+          Could not load ${API.projects} — ${e.message}<br>
+          Start the server with: <code>python3 serve.py</code>
+        </div>`;
+      ['stat-active','stat-queue','stat-paused','stat-done'].forEach(id => {
+        document.getElementById(id).textContent = '—';
+      });
+    }
+  }
+
+  function projectCard(p, todoCount = 0, firstOpenTodo = null, lastActivityDate = null) {
+    const preview = firstOpenTodo || null;
+    const ageLabel = lastActivityDate ? daysSince(lastActivityDate) : '—';
+    const ageTitle = lastActivityDate ? 'days since last todo added' : 'no todo activity';
+    return `
+      <div class="build-card" data-project-id="${p.id}"
+           draggable="true"
+           ondragstart="onProjectDragStart(event,'${p.id}')"
+           ondragend="document.querySelectorAll('.kol-drag-over').forEach(el=>el.classList.remove('kol-drag-over'))"
+           onclick="if(!_dragProjectMoved)jumpToTodo('${p.id}')"
+           title="View todos · drag to move column">
+        <div class="build-card-top">
+          <div class="build-name">${p.name}</div>
+          <button class="build-menu-btn" onclick="event.stopPropagation();showBuildMenu(event,'${p.id}')" title="Options">···</button>
+        </div>
+        <div class="build-meta">
+          <span class="build-pill ${p.status}" onclick="event.stopPropagation();cycleProjectStatus('${p.id}')" title="Click to change status" style="cursor:pointer;">${p.code}</span>
+          ${todoCount > 0 ? `<span class="todo-badge">${todoCount} open</span>` : ''}
+          <span class="build-age" style="margin-left:auto;" title="${ageTitle}">${ageLabel}</span>
+        </div>
+        ${preview ? `<div style="margin-top:8px;font-size:11px;color:var(--t3);line-height:1.4;font-weight:300;">→ ${preview}</div>` : ''}
+      </div>`;
+  }
+
+  // ── MASTER PLAN ───────────────────────────────
+  let _buildOrder = []; // ordered array of project IDs
+  let _mpDragId = null;
+
+  async function loadMasterPlan() {
+    try {
+      _buildOrder = await fetchJSON(API.buildOrder).catch(() => []);
+    } catch(e) { _buildOrder = []; }
+    renderMasterPlan();
+  }
+
+  function renderMasterPlan() {
+    const wrap = document.getElementById('master-plan-wrap');
+    if (!wrap) return;
+    const allProjects = (_projectCache || []).filter(p => !p.archived);
+    if (!allProjects.length) { wrap.innerHTML = ''; return; }
+
+    // Build ordered list: first IDs in _buildOrder that exist, then the rest
+    const ordered = [];
+    const seen = new Set();
+    _buildOrder.forEach(id => {
+      const p = allProjects.find(x => x.id === id);
+      if (p) { ordered.push({ p, ranked: true }); seen.add(id); }
+    });
+    allProjects.forEach(p => {
+      if (!seen.has(p.id)) ordered.push({ p, ranked: false });
+    });
+
+    wrap.innerHTML = `
+      <div class="master-plan-section">
+        <div class="master-plan-header">
+          <span class="master-plan-title">Master Build Order</span>
+          <span class="master-plan-hint">Drag to reprioritize</span>
+        </div>
+        <div class="master-plan-list" id="mp-list">
+          ${ordered.map(({ p, ranked }, i) => `
+            <div class="master-plan-item ${ranked ? '' : 'master-plan-unranked'}"
+                 data-id="${p.id}"
+                 draggable="true"
+                 ondragstart="mpDragStart(event,'${p.id}')"
+                 ondragover="mpDragOver(event,'${p.id}')"
+                 ondragleave="mpDragLeave(event,'${p.id}')"
+                 ondrop="mpDrop(event,'${p.id}')"
+                 ondragend="mpDragEnd()">
+              <span class="master-plan-rank">${ranked ? (i + 1) : '·'}</span>
+              <span class="master-plan-drag">⠿</span>
+              <span class="master-plan-name">${p.name}</span>
+              <span class="master-plan-code build-pill ${p.status}">${p.code}</span>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  function mpDragStart(e, id) {
+    _mpDragId = id;
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => {
+      const el = document.querySelector(`.master-plan-item[data-id="${id}"]`);
+      if (el) el.classList.add('mp-dragging');
+    }, 0);
+  }
+
+  function mpDragOver(e, targetId) {
+    if (!_mpDragId || targetId === _mpDragId) return;
+    e.preventDefault();
+    document.querySelectorAll('.master-plan-item').forEach(el => el.classList.remove('mp-drag-over'));
+    const el = document.querySelector(`.master-plan-item[data-id="${targetId}"]`);
+    if (el) el.classList.add('mp-drag-over');
+  }
+
+  function mpDragLeave(e, targetId) {
+    const el = document.querySelector(`.master-plan-item[data-id="${targetId}"]`);
+    if (el) el.classList.remove('mp-drag-over');
+  }
+
+  function mpDrop(e, targetId) {
+    e.preventDefault();
+    document.querySelectorAll('.master-plan-item').forEach(el => {
+      el.classList.remove('mp-drag-over');
+      el.classList.remove('mp-dragging');
+    });
+    if (!_mpDragId || targetId === _mpDragId) return;
+
+    // Build current order from DOM
+    const items = [...document.querySelectorAll('.master-plan-item')];
+    const ids = items.map(el => el.dataset.id);
+
+    // Remove source and insert before target
+    const srcIdx = ids.indexOf(_mpDragId);
+    const tgtIdx = ids.indexOf(targetId);
+    if (srcIdx < 0 || tgtIdx < 0) return;
+    ids.splice(srcIdx, 1);
+    const newTgtIdx = ids.indexOf(targetId);
+    ids.splice(newTgtIdx, 0, _mpDragId);
+
+    _buildOrder = ids;
+    _mpDragId = null;
+    saveBuildOrder();
+    renderMasterPlan();
+  }
+
+  function mpDragEnd() {
+    _mpDragId = null;
+    document.querySelectorAll('.master-plan-item').forEach(el => {
+      el.classList.remove('mp-dragging');
+      el.classList.remove('mp-drag-over');
+    });
+  }
+
+  async function saveBuildOrder() {
+    try {
+      await fetch(API.buildOrder, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(_buildOrder)
+      });
+    } catch(e) {}
+  }
+
+  // ── BUILD CARD MENU ───────────────────────────
+  let _openBuildMenu = null;
+
+  function closeBuildMenu() {
+    if (_openBuildMenu) { _openBuildMenu.remove(); _openBuildMenu = null; }
+  }
+
+  document.addEventListener('click', () => closeBuildMenu());
+
+  function showBuildMenu(e, projectId) {
+    closeBuildMenu();
+    const dropdown = document.createElement('div');
+    dropdown.className = 'build-dropdown';
+    dropdown.innerHTML = `
+      <button class="build-dropdown-item" onclick="combineProject('${projectId}')">
+        <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h8M9 5l3 3-3 3M8 4V2M8 14v-2M4 4l-2 2 2 2"/></svg>
+        Combine into...
+      </button>
+      <div class="build-dropdown-divider"></div>
+      <button class="build-dropdown-item danger" onclick="archiveProject('${projectId}')">
+        <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 5h12l-1 8H3L2 5z"/><path d="M1 3h14M6 3V2h4v1"/><path d="M6 8v3M10 8v3"/></svg>
+        Archive build
+      </button>
+    `;
+    document.body.appendChild(dropdown);
+    _openBuildMenu = dropdown;
+    // Position below the button
+    const rect = e.currentTarget.getBoundingClientRect();
+    const dd_w = 160;
+    let left = rect.left;
+    if (left + dd_w > window.innerWidth - 8) left = window.innerWidth - dd_w - 8;
+    dropdown.style.left = left + 'px';
+    dropdown.style.top  = (rect.bottom + 4) + 'px';
+  }
+
+  async function archiveProject(id) {
+    closeBuildMenu();
+    const p = (_projectCache || []).find(p => p.id === id);
+    const name = p ? p.name : id;
+    if (!confirm(`Archive "${name}"? It won't appear in Builds anymore, but todos are kept.`)) return;
+    try {
+      await fetch(API.archiveProject, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+    } catch(e) { /* server may not support yet — fall through */ }
+    // Also update local cache optimistically
+    if (_projectCache) {
+      const idx = _projectCache.findIndex(p => p.id === id);
+      if (idx >= 0) _projectCache[idx].archived = true;
+    }
+    loadProjects();
+  }
+
+  function combineProject(sourceId) {
+    closeBuildMenu();
+    const source = (_projectCache || []).find(p => p.id === sourceId);
+    if (!source) return;
+    const targets = (_projectCache || []).filter(p => p.id !== sourceId && !p.archived);
+    if (!targets.length) { alert('No other builds to combine into.'); return; }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'combine-modal-overlay';
+    overlay.innerHTML = `
+      <div class="combine-modal" onclick="event.stopPropagation()">
+        <div class="combine-modal-header">
+          <div class="combine-modal-title">Combine into...</div>
+          <div class="combine-modal-sub">Todos from <strong>${escapeHtml(source.name)}</strong> will move into the selected build. <strong>${escapeHtml(source.name)}</strong> will be archived.</div>
+        </div>
+        <div class="combine-modal-list">
+          ${targets.map(t => `
+            <button class="combine-target-item" onclick="executeCombine('${sourceId}','${t.id}')">
+              <span class="build-pill ${t.status}" style="pointer-events:none;">${t.code}</span>
+              <span class="combine-target-name">${escapeHtml(t.name)}</span>
+            </button>
+          `).join('')}
+        </div>
+        <div class="combine-modal-footer">
+          <button class="combine-cancel-btn" onclick="this.closest('.combine-modal-overlay').remove()">Cancel</button>
+        </div>
+      </div>
+    `;
+    overlay.onclick = () => overlay.remove();
+    document.body.appendChild(overlay);
+  }
+
+  async function executeCombine(sourceId, targetId) {
+    document.querySelector('.combine-modal-overlay')?.remove();
+    const source = (_projectCache || []).find(p => p.id === sourceId);
+    const target = (_projectCache || []).find(p => p.id === targetId);
+    if (!source || !target) return;
+    if (!confirm(`Move all todos from "${source.name}" → "${target.name}", then archive "${source.name}"?`)) return;
+
+    // Move todos: update project_id for all todos belonging to source
+    if (todoData.length === 0) {
+      try { todoData = await fetchTodoItems(); } catch(e) {}
+    }
+    let moved = 0;
+    todoData.forEach(t => {
+      if (t.project_id === sourceId) {
+        t.project_id = targetId;
+        moved++;
+      }
+    });
+    if (moved > 0) await saveTodo();
+
+    // Archive source
+    try {
+      await fetch(API.archiveProject, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: sourceId })
+      });
+    } catch(e) {}
+    if (_projectCache) {
+      const idx = _projectCache.findIndex(p => p.id === sourceId);
+      if (idx >= 0) _projectCache[idx].archived = true;
+    }
+    loadProjects();
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  let _fromProjects = false;
+
+  function jumpToTodo(projectId) {
+    _fromProjects = true;
+    const todoBtn = [...document.querySelectorAll('.nav-item')]
+      .find(b => b.textContent.trim() === 'Todo');
+    if (todoBtn) showPage('todo', todoBtn);
+    setTimeout(() => {
+      activeTodoFilter = projectId;
+      renderTodo();
+    }, 120);
+  }
+
+  function backToProjects() {
+    _fromProjects = false;
+    const projBtn = [...document.querySelectorAll('.nav-item')]
+      .find(b => b.textContent.trim() === 'Projects');
+    if (projBtn) showPage('projects', projBtn);
+  }
+
+  // ── TODO ──────────────────────────────────────
+  let todoData = [];        // the queue's FULL items array (tasks + ideas + decisions)
+  let queueMeta = null;     // preserved verbatim on write-back
+  let activeTodoFilter = 'focus';
+
+  // queue.json is {_meta, items}; the Todo tab renders only type:task rows,
+  // but todoData holds ALL rows so /write-todo never drops ideas/decisions.
+  async function fetchTodoItems() {
+    const doc = await fetchJSON(API.queue);
+    queueMeta = doc._meta || queueMeta;
+    return doc.items || [];
+  }
+  function isTaskRow(t) { return !t.type || t.type === 'task'; }
+
+  function nextCode(codePrefix) {
+    const prefix = codePrefix + '-';
+    const nums = todoData
+      .filter(t => t.code && t.code.startsWith(prefix))
+      .map(t => parseInt(t.code.slice(prefix.length)) || 0);
+    return prefix + ((nums.length ? Math.max(...nums) : 0) + 1);
+  }
+
+  function todoAdd(projectId, codePrefix, text) {
+    const code = nextCode(codePrefix);
+    const item = {
+      id: code, code, type: 'task',
+      project_id: projectId === '__general' ? 'general' : projectId,
+      text, status: 'todo', starred: false,
+      created: new Date().toISOString().slice(0, 10)
+    };
+    todoData.push(item);
+    saveTodo();
+    renderTodo();
+  }
+
+  async function loadTodo() {
+    document.getElementById('todo-ts').textContent = now();
+    try {
+      todoData = await fetchTodoItems();
+      renderTodo();
+    } catch(e) {
+      document.getElementById('todo-wrap').innerHTML =
+        `<div class="error-state">Could not load ${API.queue} — ${e.message}<br>Is serve.py running?</div>`;
+    }
+  }
+
+  function itemCode(t) {
+    // "EX-1" → "EX"
+    return (t.code || '').replace(/-\d+$/, '');
+  }
+
+  function renderTodo() {
+    const active = todoData.filter(t => isTaskRow(t) &&
+      !['archived', 'done', 'killed', 'merged'].includes(t.status));
+
+    // Build all sections regardless of filter (needed for tab bar counts)
+    const sections = {};
+    active.forEach(t => {
+      const key = t.project_id === 'general' ? '__general' : t.project_id;
+      if (!sections[key]) sections[key] = [];
+      sections[key].push(t);
+    });
+
+    Object.values(sections).forEach(items =>
+      items.sort((a, b) => (b.starred ? 1 : 0) - (a.starred ? 1 : 0))
+    );
+
+    const allKeys = Object.keys(sections).sort((a, b) => {
+      if (a === '__general') return -1;
+      if (b === '__general') return 1;
+      return a.localeCompare(b);
+    });
+
+    const starred = active.filter(t => t.starred);
+    const isSpecificFilter = activeTodoFilter !== 'all' && activeTodoFilter !== 'focus';
+
+    // Build tab bar — projects with active todos, plus current filter if it has no todos yet
+    const tabKeys = [...allKeys];
+    if (isSpecificFilter && !tabKeys.includes(activeTodoFilter)) tabKeys.push(activeTodoFilter);
+    const tabs = [
+      { key: 'focus', label: 'Focus', count: starred.length },
+      { key: 'all',   label: 'All',   count: active.length },
+      ...tabKeys.map(key => {
+        const isGeneral = key === '__general';
+        const items = sections[key] || [];
+        const prefixes = isGeneral ? ['GEN'] : [...new Set(items.map(t => t.code.replace(/-\d+$/, '')))].sort();
+        const label = prefixes.length ? prefixes.join('/') : (projectCode(key) || key.toUpperCase());
+        return { key, label, count: items.length };
+      })
+    ];
+
+    const backBtn = _fromProjects
+      ? `<div class="todo-back-bar">
+           <button class="todo-back-btn" onclick="backToProjects()">← Builds</button>
+         </div>`
+      : '';
+
+    const tabBar = `<div class="todo-tab-bar">
+      ${tabs.map(t => `
+        <button class="todo-tab ${activeTodoFilter === t.key ? 'active' : ''}"
+          onclick="filterTodo('${t.key}')">
+          ${t.label} <span style="opacity:0.5;margin-left:3px;">${t.count}</span>
+        </button>`).join('')}
+    </div>`;
+
+    // Due Today section
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const dueToday = active.filter(t => t.due_date === todayStr && t.status !== 'done');
+    const dueTodayHTML = dueToday.length > 0 ? `
+      <div class="due-today-section">
+        <div class="due-today-header">
+          <span class="due-today-dot"></span>
+          Due Today <span style="font-weight:400;opacity:0.7;margin-left:4px;">${dueToday.length} item${dueToday.length!==1?'s':''}</span>
+        </div>
+        <div class="todo-list">${dueToday.map(t => {
+          const code = t.code.replace(/-\d+$/, '');
+          return todoRow(t, code);
+        }).join('')}</div>
+      </div>` : '';
+
+    if (active.length === 0 && !isSpecificFilter) {
+      document.getElementById('todo-wrap').innerHTML =
+        backBtn + tabBar + dueTodayHTML + '<div style="padding:40px;text-align:center;color:var(--t3);font-size:12px;font-style:italic;">All clear.</div>';
+      return;
+    }
+
+    // Focus view — starred items only, flat list with project badge
+    if (activeTodoFilter === 'focus') {
+      const focusHTML = starred.length
+        ? `<div class="todo-list">${starred.map(t => {
+            const code = t.code.replace(/-\d+$/, '');
+            return todoRow(t, code);
+          }).join('')}</div>
+          <div class="todo-add-row" style="margin-top:12px;">
+            <input class="todo-add-input" placeholder="+ add to general…"
+              onkeydown="if(event.key==='Enter'&&this.value.trim()){todoAdd('__general','GEN',this.value.trim());this.value='';}">
+          </div>`
+        : '<div style="padding:40px;text-align:center;color:var(--t3);font-size:12px;font-style:italic;">Nothing starred. Star items you\'re actively working on.</div>';
+      document.getElementById('todo-wrap').innerHTML = backBtn + tabBar + dueTodayHTML + focusHTML;
+      return;
+    }
+
+    // All / project-filtered views
+    const visibleKeys = activeTodoFilter === 'all'
+      ? allKeys
+      : isSpecificFilter && !allKeys.includes(activeTodoFilter)
+        ? [activeTodoFilter]
+        : allKeys.filter(key => activeTodoFilter === key);
+
+    const sectionsHTML = visibleKeys.map(key => {
+      const items = sections[key] || [];
+      const isGeneral = key === '__general';
+      const label = isGeneral ? 'General' : (projectName(key) || key);
+      const prefixes = isGeneral ? ['GEN'] : [...new Set(items.map(t => t.code.replace(/-\d+$/, '')))].sort();
+      const code  = prefixes.length ? prefixes.join('/') : (projectCode(key) || key.toUpperCase());
+      const addCode = isGeneral ? 'GEN' : (projectCode(key) || prefixes[0] || key.toUpperCase());
+      const showHeader = activeTodoFilter === 'all';
+
+      return `
+        <div class="todo-section" id="todo-section-${isGeneral ? 'general' : key}">
+          ${showHeader ? `
+          <div class="todo-section-header">
+            <span class="todo-section-title">${label}</span>
+            <span class="todo-section-code">${code}</span>
+            <span class="todo-section-count">${items.length} open</span>
+          </div>` : ''}
+          <div class="todo-list">
+            ${items.length ? items.map(t => todoRow(t)).join('') : '<div class="todo-empty">Nothing here.</div>'}
+            <div class="todo-drop-sentinel" id="sentinel-todo-${isGeneral ? 'general' : key}"
+              ondragover="onDragOverSentinel(event,'${isGeneral ? 'general' : key}','todo')"
+              ondragleave="onDragLeaveSentinel(event,'todo','${isGeneral ? 'general' : key}')"
+              ondrop="onDropSentinel(event,'${isGeneral ? 'general' : key}','todo')"></div>
+          </div>
+          <div class="todo-add-row">
+            <input class="todo-add-input" placeholder="+ add item…"
+              onkeydown="if(event.key==='Enter'&&this.value.trim()){todoAdd('${key}','${addCode}',this.value.trim());this.value='';}">
+          </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('todo-wrap').innerHTML = backBtn + tabBar + dueTodayHTML + sectionsHTML;
+  }
+
+  function filterTodo(key) {
+    _fromProjects = false;
+    activeTodoFilter = key;
+    renderTodo();
+  }
+
+  function todoDueChip(t) {
+    if (!t.due_date) {
+      return `<button class="todo-date-btn" onclick="todoSetDate('${t.id}',this)" title="Set due date">📅</button>`;
+    }
+    const today = new Date().toISOString().slice(0, 10);
+    const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+    let cls = '';
+    let label = t.due_date;
+    if (t.due_date < today) { cls = 'overdue'; label = 'overdue'; }
+    else if (t.due_date === today) { cls = 'today'; label = 'today'; }
+    else if (t.due_date <= tomorrow) { cls = 'soon'; label = 'tomorrow'; }
+    else { label = t.due_date.slice(5); } // MM-DD
+    return `<span class="todo-due-chip ${cls}" onclick="todoSetDate('${t.id}',this)" title="${t.due_date}">${label}</span>`;
+  }
+
+  function todoSetDate(id, anchor) {
+    // If there's already a date input open nearby, remove it
+    const existing = document.getElementById('date-input-' + id);
+    if (existing) { existing.remove(); return; }
+    const item = todoData.find(t => t.id === id);
+    if (!item) return;
+    const inp = document.createElement('input');
+    inp.type = 'date';
+    inp.id = 'date-input-' + id;
+    inp.value = item.due_date || '';
+    inp.style.cssText = 'position:absolute;z-index:100;font-size:10px;border:1px solid var(--border-2);border-radius:4px;background:var(--card);color:var(--t1);padding:2px 5px;cursor:pointer;font-family:var(--font);';
+    inp.onchange = () => {
+      item.due_date = inp.value || null;
+      saveTodo();
+      inp.remove();
+      renderTodo();
+    };
+    inp.onblur = () => { inp.remove(); };
+    anchor.parentNode.style.position = 'relative';
+    anchor.parentNode.appendChild(inp);
+    inp.focus();
+    inp.click();
+  }
+
+  function todoRow(t, projectBadge = null) {
+    const isStarred = t.starred;
+    const isDone = t.status === 'done';
+    return `
+      <div class="todo-drop-zone" id="todo-${t.id}"
+        ondragover="onDragOver(event,'${t.id}','todo')"
+        ondragleave="onDragLeave(event,'${t.id}','todo')"
+        ondrop="onDrop(event,'${t.id}','todo')">
+        <div class="todo-item ${isStarred ? 'starred' : ''} ${isDone ? 'done' : ''}"
+          draggable="false"
+          ondragstart="onDragStart(event,'${t.id}','todo')"
+          ondragend="onDragEnd(event,'${t.id}','todo')">
+          <span class="drag-handle" onmousedown="this.closest('[draggable]').draggable=true" onmouseup="this.closest('[draggable]').draggable=false">⠿</span>
+          ${projectBadge ? `<span class="todo-focus-project">${projectBadge}</span>` : ''}
+          <span class="todo-item-code">${t.code}</span>
+          <span class="todo-item-text"
+            contenteditable="true"
+            spellcheck="false"
+            onblur="todoEditText('${t.id}', this.textContent.trim())"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}"
+          >${t.text}</span>
+          <div class="todo-item-actions" style="position:relative;">
+            ${todoDueChip(t)}
+            <button class="todo-btn star ${isStarred ? 'starred' : ''}"
+              onclick="todoAction('${t.id}','star')" title="Star">★</button>
+            <button class="todo-btn done-btn"
+              onclick="todoAction('${t.id}','done')" title="Done">✓</button>
+            <button class="todo-btn archive-btn"
+              onclick="todoAction('${t.id}','archive')" title="Archive">✕</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function todoEditText(id, newText) {
+    if (!newText) return;
+    const item = todoData.find(t => t.id === id);
+    if (!item || item.text === newText) return;
+    item.text = newText;
+    saveTodo();
+  }
+
+  function todoAction(id, action) {
+    const item = todoData.find(t => t.id === id);
+    if (!item) return;
+    if (action === 'star')    item.starred = !item.starred;
+    if (action === 'done')    item.status  = item.status === 'done' ? 'todo' : 'done';
+    if (action === 'archive') item.status  = 'archived';
+    saveTodo();
+    renderTodo();
+  }
+
+  async function saveTodo() {
+    await serverPost(API.queue, { _meta: queueMeta, items: todoData });
+  }
+
+  // ── ARCHIVE ───────────────────────────────────
+  async function loadArchive() {
+    try {
+      const [rawTodos, rawLife] = await Promise.all([
+        fetchTodoItems().catch(() => []),
+        fetchJSON(API.life).catch(() => [])
+      ]);
+      todoData = rawTodos;
+      lifeData = rawLife;
+      renderArchive();
+    } catch(e) {
+      document.getElementById('archive-wrap').innerHTML =
+        `<div class="error-state">Could not load ${API.queue} — ${e.message}</div>`;
+    }
+  }
+
+  function archiveRow(t, unarchiveFn) {
+    return `
+      <div class="todo-item done" style="opacity:0.6;">
+        <span class="todo-item-code">${t.code || t.id}</span>
+        <span class="todo-item-text" style="text-decoration:line-through;color:var(--t3);">${t.text}</span>
+        <div class="todo-item-actions">
+          <span style="font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.06em;text-transform:uppercase;">${t.status}</span>
+          <button class="todo-btn" onclick="${unarchiveFn}('${t.id}')" title="Restore" style="font-size:10px;">↩</button>
+        </div>
+      </div>`;
+  }
+
+  function flattenLifeItems(nodes) {
+    const items = [];
+    for (const node of nodes) {
+      if (node.type === 'item') items.push(node);
+      if (node.children && node.children.length) items.push(...flattenLifeItems(node.children));
+    }
+    return items;
+  }
+
+  function renderArchive() {
+    const archivedTodos = todoData.filter(t => isTaskRow(t) && (t.status === 'archived' || t.status === 'done'));
+    const allLifeItems  = flattenLifeItems(lifeData);
+    const archivedLife  = allLifeItems.filter(t => t.status === 'archived' || t.status === 'done');
+    archivedTodos.sort((a, b) => (b.created || '').localeCompare(a.created || ''));
+    archivedLife.sort((a, b)  => (b.created || '').localeCompare(a.created || ''));
+
+    if (archivedTodos.length === 0 && archivedLife.length === 0) {
+      document.getElementById('archive-wrap').innerHTML =
+        '<div style="padding:40px;text-align:center;color:var(--t3);font-size:12px;font-style:italic;">Nothing archived yet.</div>';
+      return;
+    }
+
+    const sections = [];
+    if (archivedTodos.length) sections.push(`
+      <div class="todo-section">
+        <div class="todo-section-header">
+          <span class="todo-section-title">Projects</span>
+          <span class="todo-section-count">${archivedTodos.length}</span>
+        </div>
+        <div class="todo-list">${archivedTodos.map(t => archiveRow(t, 'todoUnarchive')).join('')}</div>
+      </div>`);
+    if (archivedLife.length) sections.push(`
+      <div class="todo-section">
+        <div class="todo-section-header">
+          <span class="todo-section-title">Life</span>
+          <span class="todo-section-count">${archivedLife.length}</span>
+        </div>
+        <div class="todo-list">${archivedLife.map(t => archiveRow(t, 'lifeUnarchive')).join('')}</div>
+      </div>`);
+
+    document.getElementById('archive-wrap').innerHTML = sections.join('');
+  }
+
+  function todoUnarchive(id) {
+    const item = todoData.find(t => t.id === id);
+    if (!item) return;
+    item.status = 'todo';
+    saveTodo();
+    renderArchive();
+  }
+
+  // ── LIFE ──────────────────────────────────────
+  let lifeData = [];
+
+  async function loadLife() {
+    document.getElementById('life-ts').textContent = now();
+    let data = [];
+    try {
+      const r = await fetch(API.life);
+      if (r.ok) data = await r.json();
+      lifeData = data;
+    } catch(e) {
+      document.getElementById('life-wrap').innerHTML =
+        `<div class="error-state">Could not load ${API.life} — ${e.message}<br>Is serve.py running?</div>`;
+      return;
+    }
+    renderLifeTree(data);
+    renderStarredLife(data);
+  }
+
+  function collectStarredItems(nodes) {
+    const result = [];
+    (nodes || []).forEach(node => {
+      if (node.status === 'deleted') return;
+      if (node.type === 'item' && node.starred) result.push(node);
+      if (node.children) result.push(...collectStarredItems(node.children));
+    });
+    return result;
+  }
+
+  function renderStarredLife(data) {
+    const container = document.getElementById('starred-life-list');
+    if (!container) return;
+    const starred = collectStarredItems(data);
+    if (starred.length === 0) {
+      container.innerHTML = '<div class="brief-empty" style="font-size:11px;color:var(--t3)">No starred items — star items in the Life tab to pin them here.</div>';
+      return;
+    }
+    container.innerHTML = starred.map(item => `
+      <div class="starred-life-item ${item.status==='done'?'done-item':''}">
+        <span class="starred-life-star">★</span>
+        <span class="starred-life-text">${item.text}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderLifeTree(nodes) {
+    const container = document.getElementById('life-list');
+    if (!container) return;
+    container.innerHTML = '';
+    const visibleNodes = nodes.filter(n => n.status !== 'deleted');
+    visibleNodes.forEach((node) => {
+      if (node.type === 'section') {
+        container.appendChild(renderLifeSection(node));
+      } else if (node.type === 'item') {
+        container.appendChild(renderLifeItem(node, 'checklist', 0));
+      }
+    });
+
+    // Root-level add item button — own inline input, avoids querySelector finding wrong button
+    const rootAddBtn = document.createElement('button');
+    rootAddBtn.className = 'life-add-item';
+    rootAddBtn.style.cssText = 'display:block;margin-top:12px;padding:8px 12px;width:100%;text-align:left;border:1px dashed var(--border);border-radius:var(--r-xs);font-size:12px;color:var(--t3);';
+    rootAddBtn.textContent = '+ Add item';
+    rootAddBtn.onclick = () => {
+      if (container.querySelector('.life-root-input')) { container.querySelector('.life-root-input').focus(); return; }
+      const input = document.createElement('input');
+      input.className = 'life-inline-input life-root-input';
+      input.placeholder = 'New item...';
+      input.style.cssText = 'display:block;width:100%;margin-top:4px;box-sizing:border-box;';
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter' && input.value.trim()) {
+          const newItem = { id: 'LIFE-'+Date.now(), type: 'item', text: input.value.trim(), status: 'todo', starred: false, format: 'checklist', created: new Date().toISOString().slice(0,10), children: [] };
+          fetch(API.life, { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ parentId: null, item: newItem }) })
+            .then(() => loadLife());
+        }
+        if (e.key === 'Escape') { input.remove(); }
+      };
+      container.insertBefore(input, rootAddBtn);
+      input.focus();
+    };
+    container.appendChild(rootAddBtn);
+
+    // Root-level add section button
+    const rootSecBtn = document.createElement('button');
+    rootSecBtn.className = 'life-add-item';
+    rootSecBtn.style.cssText = 'display:block;margin-top:4px;padding:6px 12px;width:100%;text-align:left;font-size:11px;';
+    rootSecBtn.textContent = '+ Add section';
+    rootSecBtn.onclick = () => {
+      const input = document.createElement('input');
+      input.className = 'life-inline-input';
+      input.placeholder = 'Section name...';
+      input.style.cssText = 'display:block;width:100%;margin-top:4px;';
+      rootSecBtn.replaceWith(input);
+      input.focus();
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && input.value.trim()) {
+          const newSection = { id: 'LIFE-SEC-'+Date.now(), type: 'section', text: input.value.trim(), format: 'checklist', collapsed: false, created: new Date().toISOString().slice(0,10), children: [] };
+          fetch(API.life, { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ parentId: null, item: newSection }) })
+            .then(() => loadLife());
+        }
+        if (e.key === 'Escape') loadLife();
+      });
+    };
+    container.appendChild(rootSecBtn);
+  }
+
+  function renderLifeSection(section) {
+    const div = document.createElement('div');
+    div.className = 'life-section';
+    div.dataset.id = section.id;
+
+    const header = document.createElement('div');
+    header.className = 'life-section-header';
+    header.innerHTML = `
+      <span class="life-chevron">${section.collapsed ? '▸' : '▾'}</span>
+      <span class="life-section-title">${section.text}</span>
+      <div class="life-format-btns">
+        <button class="life-fmt-btn ${section.format==='checklist'?'active':''}" onclick="setLifeFormat('${section.id}','checklist',event)" title="Checklist">☑</button>
+        <button class="life-fmt-btn ${section.format==='numbered'?'active':''}" onclick="setLifeFormat('${section.id}','numbered',event)" title="Numbered">1.</button>
+        <button class="life-fmt-btn ${section.format==='bulleted'?'active':''}" onclick="setLifeFormat('${section.id}','bulleted',event)" title="Bulleted">•</button>
+      </div>
+      <button class="life-add-sub" onclick="addLifeSubtopic('${section.id}',event)" title="Add subtopic">+ Sub</button>
+      <button class="life-section-del" onclick="deleteLifeSection('${section.id}',event)" title="Delete section">×</button>
+    `;
+
+    const body = document.createElement('div');
+    body.className = 'life-section-body';
+    body.style.display = section.collapsed ? 'none' : 'block';
+
+    let itemIdx = 0;
+    (section.children || []).filter(c => c.status !== 'deleted').forEach(child => {
+      if (child.type === 'subsection') {
+        body.appendChild(renderLifeSubsection(child, section.format));
+      } else {
+        itemIdx++;
+        body.appendChild(renderLifeItem(child, section.format, itemIdx));
+      }
+    });
+
+    const addSubInput = document.createElement('div');
+    addSubInput.id = 'add-sub-input-' + section.id;
+    addSubInput.style.display = 'none';
+    addSubInput.innerHTML = `<input class="life-inline-input" placeholder="Subtopic name..." onkeydown="submitSubtopic('${section.id}', this, event)">`;
+    body.appendChild(addSubInput);
+
+    const addItemBtn = document.createElement('button');
+    addItemBtn.className = 'life-add-item';
+    addItemBtn.textContent = '+ Item';
+    addItemBtn.onclick = (e) => { e.stopPropagation(); addLifeItemInline(section.id, body, section.format, addItemBtn); };
+    body.appendChild(addItemBtn);
+
+    header.onclick = (e) => {
+      if (e.target.closest('.life-format-btns') || e.target.closest('.life-add-sub') || e.target.closest('.life-section-del')) return;
+      const collapsed = body.style.display === 'none';
+      body.style.display = collapsed ? 'block' : 'none';
+      header.querySelector('.life-chevron').textContent = collapsed ? '▾' : '▸';
+      fetch(API.life + '/' + section.id, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ collapsed: !collapsed }) });
+    };
+
+    div.appendChild(header);
+    div.appendChild(body);
+    return div;
+  }
+
+  function renderLifeSubsection(sub, parentFormat) {
+    const div = document.createElement('div');
+    div.className = 'life-subsection';
+    div.dataset.id = sub.id;
+
+    const header = document.createElement('div');
+    header.className = 'life-subsection-header';
+    header.innerHTML = `<span class="life-chevron">${sub.collapsed ? '▸' : '▾'}</span><span class="life-subsection-title">${sub.text}</span><button class="life-add-sub" onclick="addLifeSubtopic('${sub.id}',event)" title="Add subtopic">+ Sub</button><button class="life-section-del" onclick="deleteLifeSection('${sub.id}',event)" title="Delete subsection">×</button>`;
+
+    const body = document.createElement('div');
+    body.className = 'life-subsection-body';
+    body.style.display = sub.collapsed ? 'none' : 'block';
+
+    let itemIdx = 0;
+    (sub.children || []).filter(c => c.status !== 'deleted').forEach(item => {
+      if (item.type === 'subsection') {
+        body.appendChild(renderLifeSubsection(item, parentFormat));
+      } else {
+        itemIdx++;
+        body.appendChild(renderLifeItem(item, parentFormat, itemIdx));
+      }
+    });
+
+    const addSubInputSub = document.createElement('div');
+    addSubInputSub.id = 'add-sub-input-' + sub.id;
+    addSubInputSub.style.display = 'none';
+    addSubInputSub.innerHTML = `<input class="life-inline-input" placeholder="Subtopic name..." onkeydown="submitSubtopic('${sub.id}', this, event)">`;
+    body.appendChild(addSubInputSub);
+
+    const addItemBtn = document.createElement('button');
+    addItemBtn.className = 'life-add-item';
+    addItemBtn.textContent = '+ Item';
+    addItemBtn.onclick = (e) => { e.stopPropagation(); addLifeItemInline(sub.id, body, parentFormat, addItemBtn); };
+    body.appendChild(addItemBtn);
+
+    header.onclick = (e) => {
+      if (e.target.closest('.life-add-sub') || e.target.closest('.life-section-del')) return;
+      const collapsed = body.style.display === 'none';
+      body.style.display = collapsed ? 'block' : 'none';
+      header.querySelector('.life-chevron').textContent = collapsed ? '▾' : '▸';
+      fetch(API.life + '/' + sub.id, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ collapsed: !collapsed }) });
+    };
+
+    div.appendChild(header);
+    div.appendChild(body);
+    return div;
+  }
+
+  function renderLifeItem(item, format, idx) {
+    const div = document.createElement('div');
+    div.className = 'life-item' + (item.status === 'done' ? ' done-item' : '') + (item.starred ? ' starred' : '');
+    div.dataset.id = item.id;
+    div.draggable = true;
+
+    let markerHtml = '';
+    if (format === 'checklist') {
+      markerHtml = `<div class="life-item-check ${item.status==='done'?'done':''}" onclick="toggleLifeItem('${item.id}', this)"></div>`;
+    } else if (format === 'numbered') {
+      markerHtml = `<div class="life-item-num">${idx}.</div>`;
+    } else {
+      markerHtml = `<div class="life-item-dot"></div>`;
+    }
+
+    div.innerHTML = `
+      <span class="life-drag-handle" title="Drag to reorder">⠿</span>
+      <div class="life-item-marker">${markerHtml}</div>
+      <div class="life-item-text">${item.text}</div>
+      <div class="life-item-actions">
+        <button class="life-item-btn ${item.starred?'starred':''}" onclick="toggleLifeStar('${item.id}',this)" title="Star">★</button>
+        <button class="life-item-btn" onclick="deleteLifeItem('${item.id}',this)" title="Delete">×</button>
+      </div>
+    `;
+
+    // Drag events for reordering
+    div.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', item.id); div.style.opacity = '0.4'; });
+    div.addEventListener('dragend', () => { div.style.opacity = ''; });
+    div.addEventListener('dragover', e => { e.preventDefault(); div.style.borderTop = '2px solid var(--ink)'; });
+    div.addEventListener('dragleave', () => { div.style.borderTop = ''; });
+    div.addEventListener('drop', e => {
+      e.preventDefault(); div.style.borderTop = '';
+      const draggedId = e.dataTransfer.getData('text/plain');
+      if (draggedId !== item.id) reorderLifeItems(draggedId, item.id);
+    });
+
+    return div;
+  }
+
+  function toggleLifeItem(id, el) {
+    const isDone = el.classList.contains('done');
+    const newStatus = isDone ? 'todo' : 'done';
+    el.classList.toggle('done');
+    const itemDiv = el.closest('.life-item');
+    if (itemDiv) itemDiv.classList.toggle('done-item');
+    fetch(API.life + '/' + id, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ status: newStatus }) });
+  }
+
+  function toggleLifeStar(id, btn) {
+    const isStarred = btn.classList.contains('starred');
+    btn.classList.toggle('starred', !isStarred);
+    fetch(API.life + '/' + id, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ starred: !isStarred }) });
+  }
+
+  function deleteLifeItem(id, btn) {
+    const item = btn.closest('.life-item');
+    if (item) {
+      item.style.transition = 'opacity 0.2s';
+      item.style.opacity = '0';
+      setTimeout(() => { item.remove(); }, 200);
+    }
+    fetch(API.life + '/' + id, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ status: 'deleted' }) });
+  }
+
+  function deleteLifeSection(id, e) {
+    e.stopPropagation();
+    if (!confirm('Delete this section and all its items?')) return;
+    fetch(API.life + '/' + id, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ status: 'deleted' }) })
+      .then(() => loadLife());
+  }
+
+  function reorderLifeItems(draggedId, targetId) {
+    function findAndRemove(nodes, id) {
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].id === id) return nodes.splice(i, 1)[0];
+        if (nodes[i].children) { const f = findAndRemove(nodes[i].children, id); if (f) return f; }
+      }
+      return null;
+    }
+    function insertBefore(nodes, targetId, item) {
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].id === targetId) { nodes.splice(i, 0, item); return true; }
+        if (nodes[i].children && insertBefore(nodes[i].children, targetId, item)) return true;
+      }
+      return false;
+    }
+    const clone = JSON.parse(JSON.stringify(lifeData));
+    const item = findAndRemove(clone, draggedId);
+    if (!item) return;
+    if (!insertBefore(clone, targetId, item)) clone.push(item);
+    lifeData = clone;
+    fetch(API.life, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(clone) })
+      .then(() => loadLife());
+  }
+
+  function setLifeFormat(sectionId, format, e) {
+    e.stopPropagation();
+    fetch(API.life + '/' + sectionId, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ format }) })
+      .then(() => loadLife());
+  }
+
+  function addLifeSubtopic(sectionId, e) {
+    e.stopPropagation();
+    const inputDiv = document.getElementById('add-sub-input-' + sectionId);
+    if (inputDiv) {
+      inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
+      if (inputDiv.style.display !== 'none') {
+        const inp = inputDiv.querySelector('input');
+        if (inp) inp.focus();
+      }
+    }
+  }
+
+  function submitSubtopic(parentId, input, e) {
+    if (e.key !== 'Enter' || !input.value.trim()) return;
+    const newSub = { id: 'LIFE-SUB-' + Date.now(), type: 'subsection', text: input.value.trim(), format: 'checklist', collapsed: false, created: new Date().toISOString().slice(0,10), children: [] };
+    fetch(API.life, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ parentId, item: newSub }) })
+      .then(() => { input.value = ''; loadLife(); });
+  }
+
+  function addLifeItemInline(parentId, container, format, addBtn) {
+    // If an input already exists in THIS container (direct child), focus it
+    const existing = Array.from(container.childNodes).find(n => n.classList && n.classList.contains('life-inline-input'));
+    if (existing) { existing.focus(); return; }
+    const input = document.createElement('input');
+    input.className = 'life-inline-input';
+    input.placeholder = 'New item...';
+    input.onkeydown = (e) => {
+      if (e.key === 'Enter' && input.value.trim()) {
+        const newItem = { id: 'LIFE-' + Date.now(), type: 'item', text: input.value.trim(), status: 'todo', starred: false, format, created: new Date().toISOString().slice(0,10), children: [] };
+        fetch(API.life, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ parentId, item: newItem }) })
+          .then(() => loadLife());
+      }
+      if (e.key === 'Escape') input.remove();
+    };
+    // addBtn is always a direct child of container — safe to insertBefore
+    container.insertBefore(input, addBtn);
+    input.focus();
+  }
+
+  function lifeUnarchive(id) {
+    fetch(API.life + '/' + id, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ status: 'todo' }) })
+      .then(() => loadArchive());
+  }
+
+  // Legacy saveLife for archive compatibility
+  async function saveLife() {
+    // no-op: tree rendering uses PATCH /life/:id directly
+  }
+
+  // ── Drag to reorder ───────────────────────────
+  let _dragId = null, _dragList = null;
+
+  function onDragStart(e, id, list) {
+    if (e.target.closest('[contenteditable]')) { e.preventDefault(); return; }
+    _dragId = id; _dragList = list;
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => {
+      const zone = document.getElementById((list === 'life' ? 'life-' : 'todo-') + id);
+      const item = zone?.querySelector('.todo-item');
+      if (item) item.style.opacity = '0.3';
+    }, 0);
+  }
+
+  function onDragEnd(e, id, list) {
+    const zone = document.getElementById((list === 'life' ? 'life-' : 'todo-') + id);
+    const item = zone?.querySelector('.todo-item');
+    if (item) { item.style.opacity = ''; item.draggable = false; }
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  }
+
+  function onDragOver(e, id, list) {
+    if (_dragList !== list || _dragId === id) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const zone = document.getElementById((list === 'life' ? 'life-' : 'todo-') + id);
+    if (!zone) return;
+    document.querySelectorAll('.drag-over').forEach(x => x.classList.remove('drag-over'));
+    zone.classList.add('drag-over');
+  }
+
+  function onDragLeave(e, id, list) {
+    const zone = document.getElementById((list === 'life' ? 'life-' : 'todo-') + id);
+    if (zone) zone.classList.remove('drag-over');
+  }
+
+  function onDrop(e, id, list) {
+    e.preventDefault();
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    if (_dragList !== list || _dragId === id) return;
+    const data = list === 'todo' ? todoData : lifeData;
+    const fromIdx = data.findIndex(t => t.id === _dragId);
+    const toIdx   = data.findIndex(t => t.id === id);
+    if (fromIdx === -1 || toIdx === -1) return;
+    // Always insert before the target
+    const [item] = data.splice(fromIdx, 1);
+    const newIdx = data.findIndex(t => t.id === id);
+    data.splice(newIdx, 0, item);
+    _dragId = null; _dragList = null;
+    if (list === 'todo') { saveTodo(); renderTodo(); }
+    else { saveLife(); renderLifeTree(lifeData); }
+  }
+
+  // ── Drag sentinel (drop at end of list) ──────────
+  function onDragOverSentinel(e, key, list) {
+    if (_dragList !== list) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    document.querySelectorAll('.drag-over').forEach(x => x.classList.remove('drag-over'));
+    const sentinel = document.getElementById('sentinel-' + list + '-' + key);
+    if (sentinel) sentinel.classList.add('drag-over');
+  }
+
+  function onDragLeaveSentinel(e, list, key) {
+    const sentinel = document.getElementById('sentinel-' + list + '-' + key);
+    if (sentinel) sentinel.classList.remove('drag-over');
+  }
+
+  function onDropSentinel(e, key, list) {
+    e.preventDefault();
+    document.querySelectorAll('.todo-drop-sentinel').forEach(s => s.classList.remove('drag-over'));
+    if (!_dragId || _dragList !== list) return;
+    const data = list === 'todo' ? todoData : lifeData;
+    const fromIdx = data.findIndex(t => t.id === _dragId);
+    if (fromIdx === -1) return;
+    const [item] = data.splice(fromIdx, 1);
+    // For a keyed sentinel, find the last item in that project and insert after it
+    if (key !== 'life' && list === 'todo') {
+      // Find the last item belonging to this project bucket in the current filtered view
+      const projectId = key === 'general' ? 'general' : key;
+      let lastIdx = -1;
+      data.forEach((t, i) => { if (t.project_id === projectId) lastIdx = i; });
+      data.splice(lastIdx + 1, 0, item);
+    } else {
+      data.push(item);
+    }
+    _dragId = null; _dragList = null;
+    if (list === 'todo') { saveTodo(); renderTodo(); }
+    else { saveLife(); renderLifeTree(lifeData); }
+  }
+
+  // ── Auto-scroll + catch drag-below-last-item ──────
+  let _scrollRaf = null;
+  document.addEventListener('dragover', e => {
+    // Auto-scroll near edges
+    const scrollable = document.querySelector('.main-content') || document.body;
+    const rect = scrollable.getBoundingClientRect();
+    const threshold = 80, speed = 12;
+    cancelAnimationFrame(_scrollRaf);
+    if (e.clientY < rect.top + threshold) {
+      const scroll = () => { scrollable.scrollTop -= speed; _scrollRaf = requestAnimationFrame(scroll); };
+      _scrollRaf = requestAnimationFrame(scroll);
+    } else if (e.clientY > rect.bottom - threshold) {
+      const scroll = () => { scrollable.scrollTop += speed; _scrollRaf = requestAnimationFrame(scroll); };
+      _scrollRaf = requestAnimationFrame(scroll);
+    }
+
+    // If dragging below last item in a list, activate that list's sentinel
+    if (!_dragId) return;
+    const lists = document.querySelectorAll('.todo-list');
+    let sentinelActivated = false;
+    lists.forEach(list => {
+      const zones = [...list.querySelectorAll('.todo-drop-zone')];
+      if (!zones.length) return;
+      const lastRect = zones[zones.length - 1].getBoundingClientRect();
+      const listRect = list.getBoundingClientRect();
+      const sentinel = list.querySelector('.todo-drop-sentinel');
+      if (sentinel && e.clientY > lastRect.bottom &&
+          e.clientX >= listRect.left && e.clientX <= listRect.right) {
+        if (!sentinel.classList.contains('drag-over')) {
+          document.querySelectorAll('.drag-over').forEach(x => x.classList.remove('drag-over'));
+          sentinel.classList.add('drag-over');
+        }
+        sentinelActivated = true;
+      }
+    });
+  });
+
+  // If mouse released anywhere with a sentinel active, execute the drop
+  document.addEventListener('dragend', () => {
+    cancelAnimationFrame(_scrollRaf);
+    const activeSentinel = document.querySelector('.todo-drop-sentinel.drag-over');
+    if (activeSentinel && _dragId && _dragList) {
+      const withoutPrefix = activeSentinel.id.slice('sentinel-'.length); // "todo-example-project"
+      const dashIdx = withoutPrefix.indexOf('-');
+      const list = withoutPrefix.slice(0, dashIdx);   // "todo"
+      const key  = withoutPrefix.slice(dashIdx + 1);  // "example-project"
+      onDropSentinel({ preventDefault: () => {} }, key, list);
+    }
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  });
+
+  // ── Project lookup helpers ─────────────────────
+  let _projectCache = null;
+  async function ensureProjectCache() {
+    if (!_projectCache) {
+      try { _projectCache = await fetchJSON(API.projects); } catch(e) { _projectCache = []; }
+    }
+  }
+  function projectName(id) {
+    return (_projectCache || []).find(p => p.id === id)?.name || null;
+  }
+  function projectCode(id) {
+    return (_projectCache || []).find(p => p.id === id)?.code || null;
+  }
+
+  // Preload project cache on boot
+  ensureProjectCache();
+
+  // ── SKILLS ────────────────────────────────────
+  let allSkills = [], activeTag = 'all';
+
+  async function loadSkills() {
+    try {
+      allSkills = await fetchJSON(API.skills);
+      const tags = ['all', ...new Set(allSkills.flatMap(s => s.tags))].sort();
+      if (tags[0] !== 'all') tags.unshift('all');
+
+      document.getElementById('tag-bar').innerHTML = tags.map(t => `
+        <button class="tag-filter ${t === activeTag ? 'active' : ''}"
+          onclick="filterTag('${t}')">${t}</button>`).join('');
+
+      renderSkills();
+    } catch(e) {
+      document.getElementById('skills-list').innerHTML =
+        `<div class="error-state">Could not load ${API.skills} — ${e.message}</div>`;
+    }
+  }
+
+  function filterTag(t) {
+    activeTag = t;
+    document.querySelectorAll('.tag-filter').forEach(b => {
+      b.classList.toggle('active', b.textContent === t);
+    });
+    renderSkills();
+  }
+
+  function renderSkills() {
+    const filtered = activeTag === 'all'
+      ? allSkills
+      : allSkills.filter(s => s.tags.includes(activeTag));
+
+    document.getElementById('skills-list').innerHTML = filtered.map(s => `
+      <div class="skill-card">
+        <div class="skill-header">
+          <span class="skill-name">/${s.name}</span>
+          <div class="skill-tags">
+            ${s.tags.map(t => `<span class="skill-tag">${t}</span>`).join('')}
+          </div>
+        </div>
+        <div class="skill-desc">${s.description}</div>
+        <div class="skill-footer">
+          <span class="skill-trigger">${s.trigger}</span>
+          ${s.also_triggers?.length
+            ? `<span class="skill-also">also: ${s.also_triggers.slice(0,2).join(', ')}${s.also_triggers.length > 2 ? '…' : ''}</span>`
+            : ''}
+        </div>
+      </div>`).join('');
+  }
+
+
+  // ── Toast ─────────────────────────────────────────
+  let _toastTimer = null;
+  function toast(msg, type = 'ok') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast ' + type;
+    void el.offsetWidth;
+    el.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
+  }
+
+  // ── Server status + shared POST helper ───────────
+  function setServerStatus(ok) {
+    const dot = document.getElementById('server-dot');
+    const lbl = document.getElementById('server-label');
+    if (dot) { dot.className = 'server-dot ' + (ok ? 'online' : 'offline'); }
+    if (lbl) { lbl.textContent = ok ? 'Server on' : 'Server off'; }
+  }
+
+  async function serverPost(path, data) {
+    try {
+      const r = await fetch(path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (r.ok) {
+        setServerStatus(true);
+        toast('Saved ✓');
+      } else {
+        setServerStatus(false);
+        toast('Save failed — ' + r.status, 'err');
+      }
+    } catch(e) {
+      setServerStatus(false);
+      toast('Server off — changes lost on reload', 'err');
+    }
+  }
+
+  async function checkServer() {
+    try {
+      const r = await fetch(API.health, { cache: 'no-store' });
+      setServerStatus(r.ok);
+    } catch(e) {
+      setServerStatus(false);
+    }
+  }
+
+  // ── Polling — auto-refresh active tab every 15s ──
+  let _lastTodoHash = '';
+  let _lastLifeHash = '';
+
+  async function pollActiveTab() {
+    const activePage = document.querySelector('.page.active')?.id;
+    try {
+      if (activePage === 'page-todo') {
+        const raw = await fetchTodoItems();
+        const hash = JSON.stringify(raw);
+        if (hash !== _lastTodoHash) {
+          _lastTodoHash = hash;
+          todoData = raw;
+          renderTodo();
+        }
+      } else if (activePage === 'page-life') {
+        const r = await fetch(API.life);
+        const raw = r.ok ? await r.json() : null;
+        if (raw) {
+          const hash = JSON.stringify(raw);
+          if (hash !== _lastLifeHash) {
+            _lastLifeHash = hash;
+            lifeData = raw;
+            renderLifeTree(raw);
+          }
+        }
+      } else if (activePage === 'page-projects') {
+        // Re-render projects silently if todo counts may have changed
+        const raw = await fetchJSON(API.queue).catch(() => null);
+        if (raw) {
+          const hash = JSON.stringify(raw);
+          if (hash !== _lastTodoHash) { _lastTodoHash = hash; loadProjects(); }
+        }
+      }
+    } catch(e) { setServerStatus(false); }
+  }
+
+  setInterval(pollActiveTab, 15000);
+
+  // ── Init ──────────────────────────────────────
+  checkServer();
+  loadMorningBrief();
+  // Load starred life items for Home tab
+  fetch(API.life).then(r => r.ok ? r.json() : []).then(data => { lifeData = data; renderStarredLife(data); }).catch(() => renderStarredLife([]));
+
+  // ── QUEUE HEALTH + TODAY'S FOCUS ───────────────
+  // Both blocks are derived from the queue — no extra data file, no extra fetch beyond one.
+  const STALE_DAYS = 21;
+
+  function ageInDays(dateStr) {
+    if (!dateStr) return null;
+    const ms = Date.parse(String(dateStr).slice(0, 10) + 'T12:00:00');
+    if (isNaN(ms)) return null;
+    return Math.floor((Date.now() - ms) / 86400000);
+  }
+
+  const CLOSED_STATUSES = ['done', 'archived', 'killed', 'merged'];
+  function isOpenTask(t) { return isTaskRow(t) && !CLOSED_STATUSES.includes(t.status); }
+
+  // One fetch, both renders. Called on every Home load and on Refresh.
+  async function refreshHomeQueue() {
+    let items = null;
+    try { items = await fetchTodoItems(); } catch(e) { items = null; }
+    await ensureProjectCache();
+    renderQueueHealth(items);
+    renderTodaysFocus(items);
+  }
+
+  function healthChip(label, display, score) {
+    return `
+      <div class="brief-health-chip">
+        <div class="brief-health-dot" style="background:${healthColor(score)}"></div>
+        <div>
+          <div class="brief-health-label">${label}</div>
+          <div class="brief-health-score">${display}</div>
+        </div>
+      </div>`;
+  }
+
+  function renderQueueHealth(items) {
+    const grid = document.getElementById('health-grid');
+    if (!grid) return;
+    if (!items) {
+      grid.innerHTML = `<div class="brief-empty" style="padding:8px 0;font-size:12px">Could not read ${API.queue} — is serve.py running?</div>`;
+      return;
+    }
+    const tasks   = items.filter(isTaskRow);
+    const open    = tasks.filter(isOpenTask);
+    const starred = open.filter(t => t.starred);
+
+    const weekAgo = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10);
+    const closed  = tasks.filter(t => CLOSED_STATUSES.includes(t.status) &&
+                                      (t.closed || t.updated || t.created || '') >= weekAgo);
+
+    const stale = open.filter(t => (ageInDays(t.created) || 0) > STALE_DAYS);
+
+    grid.innerHTML = [
+      healthChip('Open',    String(open.length),    open.length <= 10 ? 100 : open.length <= 25 ? 60 : 30),
+      healthChip('Starred', String(starred.length), starred.length >= 3 && starred.length <= 5 ? 100 : starred.length > 0 ? 60 : 30),
+      healthChip('Closed 7d', String(closed.length), closed.length >= 5 ? 100 : closed.length >= 1 ? 60 : 30),
+      healthChip('Stale',   String(stale.length),   stale.length === 0 ? 100 : stale.length <= 3 ? 60 : 30)
+    ].join('');
+  }
+
+  function renderTodaysFocus(items) {
+    const card = document.getElementById('move-card');
+    if (!card) return;
+    if (!items) {
+      card.innerHTML = `<div class="brief-empty">Could not read ${API.queue} — is serve.py running?</div>`;
+      return;
+    }
+    const top = items.filter(isOpenTask).filter(t => t.starred)[0];
+    if (!top) {
+      card.innerHTML = '<div class="brief-empty">Nothing starred yet — open Todo and star three things.</div>';
+      return;
+    }
+    const age = ageInDays(top.created);
+    const ageLabel = age === null ? 'no date' : age === 0 ? 'added today' : age + 'd old';
+    const project = projectName(top.project_id) ||
+      (top.project_id === 'general' || !top.project_id ? 'General' : top.project_id);
+    card.innerHTML = `
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <div style="font-size:22px;line-height:1.1;color:var(--rc-amber);flex-shrink:0">★</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:16px;font-weight:800;letter-spacing:-0.3px;color:var(--t1);line-height:1.35">${escapeHtml(top.text || '')}</div>
+          <div style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap">
+            <span class="brief-chip">${escapeHtml(project)}</span>
+            <span class="brief-chip">${escapeHtml(top.code || top.id || '')}</span>
+            <span class="brief-chip${age !== null && age > STALE_DAYS ? ' overdue' : ''}">${ageLabel}</span>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function healthColor(score) {
+    if (score >= 75) return 'var(--rc-green)';
+    if (score >= 50) return 'var(--rc-amber)';
+    return 'var(--rc-red)';
+  }
+
+  // ── MORNING BRIEF ──────────────────────────────
+  async function loadMorningBrief() {
+    const dateEl = document.getElementById('brief-date');
+    const chipsEl = document.getElementById('brief-chips');
+    const now = new Date();
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    if (dateEl) dateEl.textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+
+    // Queue Health + Today's Focus are computed, not part of the brief file.
+    refreshHomeQueue();
+
+    let data = null;
+    try {
+      const r = await fetch(API.brief);
+      if (r.ok) data = await r.json();
+    } catch(e) {}
+
+    if (!data || Object.keys(data).length === 0) {
+      renderBriefPlaceholder();
+      return;
+    }
+
+
+    // Inbox
+    function renderEmailList(items, bodyId, countId, quadrant) {
+      const el = document.getElementById(bodyId);
+      const countEl = document.getElementById(countId);
+      if (!el) return;
+      if (!items || items.length === 0) {
+        el.innerHTML = '<div class="brief-empty" style="padding:6px 0 4px;font-size:11px;color:var(--t3)">Nothing here</div>';
+        return;
+      }
+      el.innerHTML = items.map(e => {
+        const safeS = (e.sender||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        const safeSubj = (e.subject||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        const safeSumm = (e.summary||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        return `<div class="brief-email-item">
+          <div class="brief-email-top-row">
+            <div class="brief-email-sender">${e.sender}</div>
+            <button class="brief-email-pin" onclick="saveEmailToLife('${safeS}','${safeSubj}','${safeSumm}','${quadrant}')" title="Save to Life">📌</button>
+          </div>
+          <div class="brief-email-subject">${e.subject}</div>
+          <div class="brief-email-summary">${e.summary}</div>
+        </div>`;
+      }).join('');
+      if (countEl) { countEl.textContent = items.length; countEl.style.display = 'inline'; }
+    }
+    if (data.inbox) {
+      renderEmailList(data.inbox.urgent_important, 'inbox-ui-body', 'inbox-ui-count', 'ui');
+      renderEmailList(data.inbox.urgent,           'inbox-u-body',  'inbox-u-count',  'u');
+      renderEmailList(data.inbox.important,        'inbox-i-body',  'inbox-i-count',  'i');
+      // Total badge
+      const total = (data.inbox.urgent_important||[]).length + (data.inbox.urgent||[]).length + (data.inbox.important||[]).length;
+      const badge = document.getElementById('inbox-total-badge');
+      if (badge && total > 0) { badge.textContent = total; badge.style.display = 'inline'; }
+    }
+
+    // News — always show 1 preview, rest collapsible
+    function renderNewsCategory(items, previewId, restId, moreId) {
+      const preview = document.getElementById(previewId);
+      const rest = document.getElementById(restId);
+      const more = document.getElementById(moreId);
+      if (!preview) return;
+      if (!items || items.length === 0) {
+        preview.innerHTML = '<div class="brief-news-item" style="color:var(--t3);font-size:12px;padding-bottom:4px">No updates</div>';
+        return;
+      }
+      const newsItemHtml = n => `<div class="brief-news-item"><div class="brief-news-headline">${n.headline}</div><div class="brief-news-summary">${n.summary}</div>${n.source ? `<div class="brief-news-source">${n.source}</div>` : ''}</div>`;
+      preview.innerHTML = newsItemHtml(items[0]);
+      if (items.length > 1 && rest && more) {
+        rest.innerHTML = items.slice(1).map(newsItemHtml).join('');
+        more.style.display = 'block';
+        more.innerHTML = `▾ Show ${items.length - 1} more`;
+      }
+    }
+    // Categories are declared in the data file, so adding one is a data edit, not a code edit.
+    const newsWrap = document.getElementById('news-cats');
+    if (newsWrap) {
+      const newsCats = (data.news && Array.isArray(data.news.categories)) ? data.news.categories : [];
+      if (!newsCats.length) {
+        newsWrap.innerHTML = '<div class="brief-empty" style="font-size:12px">No news categories — add <code>news.categories</code> to morning-brief.json.</div>';
+      } else {
+        newsWrap.innerHTML = newsCats.map(c => `
+          <div class="brief-news-cat" id="news-${c.key}">
+            <div class="brief-news-cat-header">
+              <span class="brief-news-dot" style="background:${c.color || '#9C9A93'}"></span>
+              <span class="brief-news-cat-name">${escapeHtml(c.label || c.key)}</span>
+              <button class="brief-news-more" id="news-${c.key}-more" onclick="toggleNewsRest('news-${c.key}-rest','news-${c.key}-more')" style="display:none"></button>
+            </div>
+            <div class="brief-news-preview" id="news-${c.key}-preview"></div>
+            <div class="brief-news-rest" id="news-${c.key}-rest" style="display:none"></div>
+          </div>`).join('');
+        newsCats.forEach(c => renderNewsCategory(
+          data.news[c.key], `news-${c.key}-preview`, `news-${c.key}-rest`, `news-${c.key}-more`));
+      }
+    }
+
+    // Edge
+    if (data.edge && data.edge.length > 0) {
+      document.getElementById('edge-list').innerHTML = data.edge.map((e,i) => `
+        <div class="brief-edge-item" onclick="toggleEdgeHowto(${i})">
+          <div class="brief-edge-name">⚡ ${e.name}</div>
+          <div class="brief-edge-what">${e.what}</div>
+          <div class="brief-edge-why" style="color:var(--rc-green)">${e.why}</div>
+          <div class="brief-edge-howto" id="edge-howto-${i}">${e.howto}</div>
+        </div>
+      `).join('');
+    } else {
+      document.getElementById('edge-list').innerHTML = '<div class="brief-empty">No Edge items today.</div>';
+    }
+
+    // Events — both the categories and the items come from the data file.
+    (function renderEvents() {
+      const el = document.getElementById('events-list');
+      if (!el) return;
+      const ev = data.events || {};
+      const items = ev.items || [];
+      if (!items.length) {
+        el.innerHTML = '<div class="brief-empty" style="font-size:11px">Nothing scheduled.</div>';
+        return;
+      }
+      const cats = {};
+      (ev.categories || []).forEach(c => { cats[c.key] = c; });
+      const fallback = { label: 'Event', color: '#4C6EF5' };
+      const card = e => {
+        const c = cats[e.category] || fallback;
+        const color = c.color || fallback.color;
+        const meta = [e.where, e.when].filter(Boolean).join(' · ');
+        return `<div class="brief-event-item">
+          <div class="brief-event-top">
+            <span class="brief-event-chip" style="background:${color}22;color:${color}">${escapeHtml(c.label || c.key || 'Event')}</span>
+            <span class="brief-event-title">${escapeHtml(e.title || '')}</span>
+          </div>
+          ${meta ? `<div class="brief-event-meta">${escapeHtml(meta)}</div>` : ''}
+          ${e.why ? `<div class="brief-event-why">${escapeHtml(e.why)}</div>` : ''}
+          ${e.url ? `<a class="brief-event-link" href="${e.url}" target="_blank" rel="noopener">${escapeHtml(e.source || 'source')} ↗</a>` : ''}
+        </div>`;
+      };
+      const PREVIEW = 3;
+      let html = items.slice(0, PREVIEW).map(card).join('');
+      if (items.length > PREVIEW) {
+        html += `<div class="brief-event-rest" id="events-rest">${items.slice(PREVIEW).map(card).join('')}</div>`;
+        html += `<button class="brief-event-more" id="events-more" onclick="const r=document.getElementById('events-rest'),b=this;const open=r.style.display==='block';r.style.display=open?'none':'block';b.innerHTML=open?'▾ Show ${items.length-PREVIEW} more':'▴ Show less';">▾ Show ${items.length-PREVIEW} more</button>`;
+      }
+      el.innerHTML = html;
+    })();
+
+    // Chips
+    if (chipsEl) {
+      const ts = data.generated_at ? new Date(data.generated_at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : null;
+      chipsEl.innerHTML = (ts ? `<span class="brief-chip">Updated ${ts}</span>` : '');
+    }
+  }
+
+  function saveEmailToLife(sender, subject, summary, quadrant) {
+    const quadrantToParent = { ui: 'LIFE-SUB-UI', u: 'LIFE-SUB-U', i: 'LIFE-SUB-I' };
+    const parentId = quadrantToParent[quadrant] || 'LIFE-SECTION-GMAIL';
+    const text = `[${sender}] ${subject}${summary ? ' — ' + summary : ''}`;
+    const newItem = { id: 'LIFE-EMAIL-'+Date.now(), type: 'item', text, status: 'todo', starred: false, format: 'checklist', created: new Date().toISOString().slice(0,10), children: [] };
+    fetch(API.life, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ parentId, item: newItem }) })
+      .then(r => { if (r.ok) toast('Saved to Life ✓'); else toast('Save failed — is server running?'); });
+  }
+
+  function toggleNewsRest(restId, moreId) {
+    const rest = document.getElementById(restId);
+    const more = document.getElementById(moreId);
+    if (!rest || !more) return;
+    const open = rest.style.display !== 'none';
+    rest.style.display = open ? 'none' : 'block';
+    const count = rest.querySelectorAll('.brief-news-item').length;
+    more.innerHTML = open ? `▾ Show ${count} more` : '▴ Show less';
+  }
+
+
+  // No brief file yet (or an empty one). Home still works — Queue Health and Today's
+  // Focus come from the queue — so only the brief-fed sections need a message.
+  function renderBriefPlaceholder() {
+    const msg = `<div class="brief-empty" style="font-size:12px">No brief data — write <code>dashboard/data/morning-brief.json</code>.</div>`;
+    ['news-cats', 'events-list', 'edge-list'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = msg;
+    });
+    ['inbox-ui-body', 'inbox-u-body', 'inbox-i-body'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<div class="brief-empty" style="padding:6px 0 4px;font-size:11px;color:var(--t3)">Nothing here</div>';
+    });
+  }
+
+
+  function toggleBriefCol(bodyId) {
+    const el = document.getElementById(bodyId);
+    if (!el) return;
+    const open = el.style.display !== 'none';
+    el.style.display = open ? 'none' : 'block';
+    const header = el.previousElementSibling;
+    if (header) { const chev = header.querySelector('.brief-chevron'); if(chev) chev.textContent = open ? '▸' : '▾'; }
+  }
+
+  function toggleEdgeHowto(i) {
+    const el = document.getElementById('edge-howto-' + i);
+    if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
+</body>
+</html>

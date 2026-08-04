@@ -1,0 +1,118 @@
+{
+  "generated_at": "2026-01-15T07:00:00",
+  "inbox": {
+    "urgent_important": [
+      {
+        "sender": "Example Sender",
+        "subject": "Example email that is both urgent and important",
+        "summary": "Placeholder content. Replace with your own, or generate this file from a script. The pin button files this into the Life tab."
+      }
+    ],
+    "urgent": [
+      {
+        "sender": "Example Sender",
+        "subject": "Example email that is urgent but not important",
+        "summary": "Placeholder content. Replace with your own."
+      }
+    ],
+    "important": [
+      {
+        "sender": "Example Sender",
+        "subject": "Example email that is important but not urgent",
+        "summary": "Placeholder content. Replace with your own."
+      }
+    ]
+  },
+  "news": {
+    "categories": [
+      { "key": "topic_one",   "label": "Topic One",   "color": "#4C6EF5" },
+      { "key": "topic_two",   "label": "Topic Two",   "color": "#F59F00" },
+      { "key": "topic_three", "label": "Topic Three", "color": "#2F9E44" }
+    ],
+    "topic_one": [
+      {
+        "headline": "Example headline for the first topic",
+        "summary": "Placeholder summary. Add a category by adding an entry to news.categories and a matching key at this level - no HTML edit required.",
+        "source": "Example Source"
+      },
+      {
+        "headline": "Second example headline, collapsed behind Show more",
+        "summary": "Only the first item in a category is shown; the rest expand.",
+        "source": "Example Source"
+      }
+    ],
+    "topic_two": [
+      {
+        "headline": "Example headline for the second topic",
+        "summary": "Placeholder summary. Replace with your own.",
+        "source": "Example Source"
+      }
+    ],
+    "topic_three": [
+      {
+        "headline": "Example headline for the third topic",
+        "summary": "Placeholder summary. Replace with your own.",
+        "source": "Example Source"
+      }
+    ]
+  },
+  "edge": [
+    {
+      "name": "Example edge item",
+      "what": "A short factual note about something that changed.",
+      "why": "Why it matters to you specifically - this line is the point of the section.",
+      "howto": "Click the card to reveal this line: what to actually do about it."
+    },
+    {
+      "name": "Second example edge item",
+      "what": "Placeholder content. Replace with your own.",
+      "why": "Replace with your own.",
+      "howto": "Replace with your own."
+    }
+  ],
+  "events": {
+    "categories": [
+      { "key": "free",     "label": "Free",     "color": "#2F9E44" },
+      { "key": "learning", "label": "Learning", "color": "#4C6EF5" },
+      { "key": "social",   "label": "Social",   "color": "#9C36B5" }
+    ],
+    "items": [
+      {
+        "category": "free",
+        "title": "Example free event",
+        "where": "Example Venue",
+        "when": "Mon 6:00 PM",
+        "why": "Placeholder reason this is worth your time.",
+        "url": "https://example.com",
+        "source": "example.com"
+      },
+      {
+        "category": "learning",
+        "title": "Example workshop",
+        "where": "Example Venue",
+        "when": "Wed 7:00 PM",
+        "why": "Placeholder reason. Replace with your own.",
+        "url": "https://example.com",
+        "source": "example.com"
+      },
+      {
+        "category": "social",
+        "title": "Example meetup",
+        "where": "Example Venue",
+        "when": "Thu 6:30 PM",
+        "why": "Placeholder reason. Replace with your own.",
+        "url": "https://example.com",
+        "source": "example.com"
+      },
+      {
+        "category": "free",
+        "title": "Fourth example event, collapsed behind Show more",
+        "where": "Example Venue",
+        "when": "Sat 11:00 AM",
+        "why": "Only the first three are shown; the rest expand.",
+        "url": "https://example.com",
+        "source": "example.com"
+      }
+    ]
+  }
+}

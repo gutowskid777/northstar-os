@@ -1,0 +1,62 @@
+[
+  {
+    "id": "example-site",
+    "code": "SITE",
+    "name": "Example Project: Website",
+    "status": "active",
+    "phase": "build",
+    "priority": 1,
+    "stack": ["HTML", "CSS", "JavaScript"],
+    "collaborators": [],
+    "next_actions": [
+      "Replace this project with your own",
+      "Set status to active / queue / paused / done"
+    ],
+    "notes": "Example project. Replace with your own. Status drives which kanban column it lands in.",
+    "last_updated": "2026-01-12"
+  },
+  {
+    "id": "example-app",
+    "code": "APP",
+    "name": "Example Project: App",
+    "status": "queue",
+    "phase": "spec",
+    "priority": 2,
+    "stack": ["Python"],
+    "collaborators": [],
+    "next_actions": [
+      "Write the one-page spec",
+      "Decide whether this is worth building at all"
+    ],
+    "notes": "Example project. Replace with your own. Queue means: agreed, not started.",
+    "last_updated": "2026-01-10"
+  },
+  {
+    "id": "example-research",
+    "code": "RSCH",
+    "name": "Example Project: Research",
+    "status": "paused",
+    "phase": "hold",
+    "priority": 3,
+    "stack": [],
+    "collaborators": ["Example Collaborator"],
+    "next_actions": [
+      "Revisit in a month"
+    ],
+    "notes": "Example project. Replace with your own. Paused means: deliberately not now.",
+    "last_updated": "2026-01-06"
+  },
+  {
+    "id": "example-launch",
+    "code": "LNCH",
+    "name": "Example Project: Launch",
+    "status": "done",
+    "phase": "shipped",
+    "priority": 4,
+    "stack": ["HTML"],
+    "collaborators": [],
+    "next_actions": [],
+    "notes": "Example project. Replace with your own. Done projects stay visible so the Done column is never empty.",
+    "last_updated": "2026-01-04"
+  }
+]

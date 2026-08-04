@@ -1,0 +1,79 @@
+{
+  "_meta": {
+    "what": "THE queue - every task, idea, and open decision in one file. The Todo tab renders only type:task rows, but writes preserve every row, so ideas and decisions can never be dropped by a save. Replace these examples with your own.",
+    "updated": "2026-01-15",
+    "count": 7
+  },
+  "items": [
+    {
+      "id": "SITE-1",
+      "code": "SITE-1",
+      "project_id": "example-site",
+      "text": "Example starred task - this is what Today's Focus shows on the Home tab",
+      "status": "todo",
+      "starred": true,
+      "created": "2026-01-12",
+      "type": "task"
+    },
+    {
+      "id": "SITE-2",
+      "code": "SITE-2",
+      "project_id": "example-site",
+      "text": "Example task - unstarred, so it only shows under All or its project tab",
+      "status": "todo",
+      "starred": false,
+      "created": "2026-01-11",
+      "type": "task"
+    },
+    {
+      "id": "APP-1",
+      "code": "APP-1",
+      "project_id": "example-app",
+      "text": "Example starred task on a second project - replace with your own",
+      "status": "todo",
+      "starred": true,
+      "created": "2026-01-10",
+      "type": "task"
+    },
+    {
+      "id": "GEN-1",
+      "code": "GEN-1",
+      "project_id": "general",
+      "text": "Example task with no project - anything typed into the General add row lands here",
+      "status": "todo",
+      "starred": false,
+      "created": "2026-01-09",
+      "type": "task"
+    },
+    {
+      "id": "SITE-3",
+      "code": "SITE-3",
+      "project_id": "example-site",
+      "text": "Example finished task - marked done, so it shows on the Archive tab",
+      "status": "done",
+      "starred": false,
+      "created": "2026-01-08",
+      "type": "task"
+    },
+    {
+      "id": "IDEA-1",
+      "code": "IDEA-1",
+      "project_id": "general",
+      "text": "Example idea - kept in the same file but never rendered on the Todo tab",
+      "status": "todo",
+      "starred": false,
+      "created": "2026-01-07",
+      "type": "idea"
+    },
+    {
+      "id": "DEC-1",
+      "code": "DEC-1",
+      "project_id": "example-app",
+      "text": "Example open decision - replace with a real one you keep deferring",
+      "status": "todo",
+      "starred": false,
+      "created": "2026-01-06",
+      "type": "decision"
+    }
+  ]
+}

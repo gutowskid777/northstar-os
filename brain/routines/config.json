@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "what": "Watermarks and cadences for the recurring routines. This tiny file is what lets the system run rituals with NO cron and NO scheduler: the session-start read checks the dates here and nudges when something is due. A cloud cron would only ever see last-pushed state, so it would demand constant pushing, which is upkeep.",
+    "updated": "2026-01-15"
+  },
+  "weekly_review": {
+    "last_review": null,
+    "cadence_days": 7,
+    "last_run_summary": null,
+    "note": "When today - last_review >= cadence_days, surface a one-line nudge in whatever chat is open. Stamp today's date here after a review runs. null means it has never run."
+  },
+  "capture_ingestion": {
+    "source": null,
+    "last_ingested": null,
+    "last_run_summary": null,
+    "note": "Optional. Point 'source' at a file or doc you brain-dump into. The watermark stops the same notes being ingested twice."
+  }
+}

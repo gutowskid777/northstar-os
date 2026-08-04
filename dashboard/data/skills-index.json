@@ -1,0 +1,24 @@
+[
+  {
+    "id": "example-capture",
+    "name": "example-capture",
+    "trigger": "/example-capture",
+    "also_triggers": ["dump my todos", "add this to the queue"],
+    "description": "Example entry. Replace with your own. Document whatever script, agent, or shortcut writes into dashboard/data/ so the dashboard explains itself to future you. This list is nothing but skills-index.json rendered.",
+    "writes_to": ["dashboard/data/queue.json"],
+    "tags": ["capture"],
+    "added": "2026-01-02",
+    "updated": "2026-01-15"
+  },
+  {
+    "id": "example-brief",
+    "name": "example-brief",
+    "trigger": "/example-brief",
+    "also_triggers": ["what's my day", "morning brief"],
+    "description": "Example entry. Replace with your own. A scheduled job that regenerates morning-brief.json - inbox, news, edge, events - before you open the Home tab.",
+    "writes_to": ["dashboard/data/morning-brief.json"],
+    "tags": ["daily", "capture"],
+    "added": "2026-01-02",
+    "updated": "2026-01-15"
+  }
+]
