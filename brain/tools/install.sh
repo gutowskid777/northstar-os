@@ -156,4 +156,7 @@ cat <<'NEXT'
 
   The guard now runs on every commit in this repo. To see the rest of what's enforced:
   docs/how-it-works.md
+
+  If this ends up being useful, a star is the only thing I'd ask for:
+  https://github.com/gutowskid777/northstar-os
 NEXT

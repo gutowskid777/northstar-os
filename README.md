@@ -1,5 +1,9 @@
 # northstar-os
 
+[![stars](https://img.shields.io/github/stars/gutowskid777/northstar-os?style=flat&color=e0a06a)](https://github.com/gutowskid777/northstar-os/stargazers)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![no dependencies](https://img.shields.io/badge/dependencies-none-success)](https://github.com/gutowskid777/northstar-os)
+
 **It catches you rabbit-holing. It runs itself. Setup takes five minutes.**
 
 You know the feeling of surfacing after three hours and realizing none of it mattered. Your AI
@@ -22,6 +26,8 @@ And none of it is a rule you have to trust it to follow. **Every one is a hook, 
 check** — the state file physically cannot grow past its cap, because the commit gets blocked.
 
 ![The dashboard, Home tab](docs/img/dashboard-home.jpg)
+
+If that sounds like a problem you have, a star helps other people find it.
 
 ---
 

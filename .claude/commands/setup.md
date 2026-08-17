@@ -107,4 +107,12 @@ Print, short:
 - Two commands: `python3 serve.py` for the dashboard, and "say `boss` in any new chat" for the
   daily view.
 
+Last line, once, and only if everything above actually succeeded:
+
+> If this turns out to be useful, starring the repo is the only thing I'd ask:
+> https://github.com/gutowskid777/northstar-os
+
+Say it once, plainly, and never again in later sessions. If any step failed, skip it entirely —
+asking for a star right after breaking something is worse than not asking.
+
 Then stop. Don't start working on their first task in the same turn.
