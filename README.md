@@ -13,12 +13,20 @@ northstar-os gives it your ranked goals, and then it interrupts you. Mid-answer,
 not in a summary afterwards: *"heads up, your #1 is the launch, and this doesn't move it."* You can
 keep going. It just stops being an accident.
 
+```bash
+git clone https://github.com/gutowskid777/northstar-os
+cd northstar-os
+bash brain/tools/install.sh
+claude          # then type /setup
+```
+
+`/setup` interviews you and writes your goals, your working style and your first task list. Five
+minutes, nothing to fill in by hand. Needs [Claude Code](https://claude.com/claude-code), git and
+python3 — no npm, no accounts, no API keys.
+
 The other half is that it costs you nothing to keep. No cron, no daily grooming, no weekly tidy-up.
 Files cap themselves and rotate their own history. The weekly review remembers it's due on its own.
 It proposes its own improvements, scored against your goals, and the default answer is no.
-
-**Five minutes to adopt it.** Clone it, type `/setup`, answer some questions about what you're
-trying to do. It writes your goals, your facts, your working style, and your first queue.
 
 ![Running /setup in a fresh clone](docs/img/setup-cli.png)
 
@@ -31,23 +39,14 @@ If that sounds like a problem you have, a star helps other people find it.
 
 ---
 
-## Install
+## Install, in detail
 
-```bash
-git clone https://github.com/gutowskid777/northstar-os
-cd northstar-os
-bash brain/tools/install.sh
-claude
-```
+`/setup` asks for your north star, your top 3 ranked, your live projects, how blunt you want it,
+and what's currently on your plate. Then it writes your brain, seeds your queue, and gives you your
+first move.
 
-then type `/setup`.
-
-The setup command interviews you: your north star, your top 3 ranked, your live projects, how blunt
-you want it, and what's currently on your plate. Then it writes your brain, seeds your queue, and
-gives you your first move. A few minutes, and nothing to fill in by hand.
-
-Requirements: [Claude Code](https://claude.com/claude-code), `git`, and `python3`. No npm, no
-dependencies, no accounts, no API keys. Everything is files on your disk.
+`install.sh` links the pre-commit guard (git hooks aren't cloned, so this is the one thing a clone
+can't do for you) and deliberately trips it so you watch it block a bad commit before you trust it.
 
 On first launch Claude Code will ask you to approve the project hook in `.claude/settings.json`.
 That's `brain/tools/reply-brevity.sh`, nine lines of `cat`, and you should read it before you say
