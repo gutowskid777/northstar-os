@@ -10,9 +10,9 @@ This is the whole system. Everything else in the repo either reads these files o
 | `rules.local.md` | Your working style. Yours, never overwritten. |
 | `facts-core.md` | Atomic facts, so nothing about you gets invented. Capped at 50 lines. |
 | `queue.json` | THE queue. Every task, idea, and open decision. **Capped at 250 rows.** |
-| `self-improve.md` | The loop for turning recurring friction into one durable fix. |
+| `docs/self-improve.md` | The loop for turning recurring friction into one durable fix. |
 | `doc-structure.md` | How docs stay navigable instead of sprawling. |
-| `focus-mode.md` | A standalone pomodoro conductor. Not wired into anything. |
+| `docs/focus-mode.md` | A standalone pomodoro conductor. Not wired into anything. |
 | `credentials.md` | **Gitignored. Never committed.** Created by you, if you want it. |
 | `history/` | Where rotated state and closed queue rows go. Nothing is ever deleted. |
 | `routines/` | Specs for the recurring rituals, plus the watermark file that makes them run with no cron. |

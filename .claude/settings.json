@@ -6,6 +6,10 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/brain/tools/reply-brevity.sh\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/brain/tools/rabbit-gate.sh\""
           }
         ]
       }

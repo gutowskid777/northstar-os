@@ -47,7 +47,7 @@ cat > "$HOOK" <<'SHIM'
 exec "$(git rev-parse --show-toplevel)/brain/tools/brain-guard.sh"
 SHIM
 chmod +x "$HOOK"
-chmod +x "$ROOT/brain/tools/brain-guard.sh" "$ROOT/brain/tools/reply-brevity.sh"
+chmod +x "$ROOT/brain/tools/brain-guard.sh" "$ROOT/brain/tools/reply-brevity.sh" "$ROOT/brain/tools/rabbit-gate.sh"
 echo "  ✓ pre-commit hook installed → brain/tools/brain-guard.sh"
 
 # --- 3. prove the guard actually fires -------------------------------------------------------

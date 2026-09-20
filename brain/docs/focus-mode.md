@@ -1,7 +1,7 @@
 # Focus mode — a pomodoro conductor
 # STATUS: STANDALONE — deliberately NOT wired into the brain. Not auto-loaded, not referenced in
 # rules.md or CLAUDE.md. It's here because it's useful, not because it's part of the system.
-# To use it in any chat: say "read brain/focus-mode.md and run it."
+# To use it in any chat: say "read brain/docs/focus-mode.md and run it."
 
 ## What this is
 

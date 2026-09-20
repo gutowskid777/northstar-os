@@ -2,8 +2,10 @@
 # THIN ON PURPOSE. No live data, no project table, no detailed rules. Those live in brain/.
 # This file auto-loads into every session, so it must stay stable and almost never change.
 
-Your personal AI OS. The brain owns `brain/`; your projects stay wherever they already are,
-each with its own `context.md`.
+Your personal AI OS. The brain owns `brain/`; each project lives at `projects/<name>/` with a
+mandatory `context.md`. The root has four kinds and nothing else — `brain/`, `projects/`,
+`dashboard/`, `_trash/` — and `brain-guard.sh` rejects anything outside that shape at commit time.
+The full tree: `brain/doc-structure.md` § The tree.
 
 If `brain/goals.md` still contains its placeholder text, this brain has never been set up.
 Say so in one line and offer to run `/setup`. Don't start guessing at goals.
@@ -20,7 +22,9 @@ Don't re-read all of `brain/` every prompt — pull other files on demand.
    lives in `brain/history/`.)
 2. `brain/goals.md` — the ranked prioritization anchor. Everything is scored against this.
 3. `brain/rules.md` — the constitution (autonomy, the queue, anti-rabbit-hole, files-as-truth),
-   plus `brain/rules.local.md` for personal working style.
+   plus `brain/rules.local.md` for personal working style. §3's rabbit-hole rule is backed by
+   `brain/tools/rabbit-gate.sh`, which rides on every message: open with a SHIP / UPKEEP / RABBIT
+   verdict before any work, and on RABBIT do nothing until the user types "override".
 4. `brain/facts-core.md` — atomic personal facts, so they can never be invented.
 
 Also check `brain/routines/config.json` → `weekly_review`. If

@@ -94,6 +94,13 @@ is upkeep, and upkeep is the one thing this system exists to avoid.
   declared #1 move is something else → SAY SO in the same turn, every time. *"Heads up: the live #1
   is X, this doesn't move it."* Proceeding is fine if the user directed it. Going silent is not.
   This is the single condition that catches the most drift, and it costs one sentence.
+- **The gate (the mechanism behind all of the above): `brain/tools/rabbit-gate.sh`.** It runs on
+  every message, names the live #1, and requires a one-line verdict before any work: **SHIP**
+  (moves the #1, or a dated real-world obligation), **UPKEEP** (a lower-ranked goal, bounded,
+  must not delay the #1), or **RABBIT** (neither). RABBIT = say it, file the row, do nothing else
+  until the user types **"override"**. The rest of this section is judgment; the gate is the part
+  that survives turn forty. It also trips on the phrases people type while talking themselves into
+  a detour — and the user saying they are not rabbit-holing does not change the verdict.
 
 ## 4. Self-improvement (bounded, propose-only)
 

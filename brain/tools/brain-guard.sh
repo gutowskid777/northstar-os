@@ -134,4 +134,53 @@ while IFS= read -r f; do
   fi
 done <<< "$STAGED"
 
+# ---------------------------------------------------------------------------------------------
+# 6. THE TREE. One structure, every level, enforced instead of described.
+#
+#    A folder layout is a rule like any other: written down once, obeyed for a week, and then
+#    quietly violated by the fourth parallel session that needed somewhere to put a file. The
+#    cost shows up months later as four places to look for one thing. So the shape lives here.
+#
+#    The root has four kinds and nothing else:
+#      brain/      the OS: state, rules, goals, queue, routines, tools, history
+#      projects/   one folder per project, each with a MANDATORY context.md
+#      dashboard/  the local dashboard's page and seed data (docs/ and example/ ship with the repo)
+#      _trash/     gitignored. Retired things move here; nothing is ever rm'd.
+#
+#    Adding a new kind of thing is allowed — it takes editing this list and brain/doc-structure.md
+#    in the same commit, which is exactly the amount of friction that keeps it deliberate.
+# ---------------------------------------------------------------------------------------------
+ROOT_ALLOW='^(brain|projects|dashboard|docs|example)/|^\.claude/|^\.github/|^(\.gitignore|CLAUDE\.md|AGENTS\.md|README\.md|LICENSE|serve\.py)$'
+BRAIN_ALLOW='^brain/(README|brain-state|goals|rules|rules\.local|facts-core|doc-structure)\.md$|^brain/queue\.json$|^brain/your-move\.md$|^brain/(docs|history|routines|tools)/'
+
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+
+  if ! echo "$f" | grep -qE "$ROOT_ALLOW"; then
+    fail "'$f' is outside the tree. A project goes in projects/<name>/, OS files in brain/, retired things in _trash/ (gitignored). See brain/doc-structure.md § The tree."
+  fi
+
+  # Nothing loose in projects/ — every file belongs to exactly one project.
+  case "$f" in
+    projects/*/*) ;;
+    projects/*) fail "'$f' sits directly in projects/. Every file belongs inside projects/<name>/." ;;
+  esac
+
+  # A project without a map is a project nobody can pick up later, including you.
+  case "$f" in
+    projects/*)
+      proj=$(echo "$f" | cut -d/ -f2)
+      if ! git cat-file -e ":projects/$proj/context.md" 2>/dev/null; then
+        fail "projects/$proj/ has no context.md. Every project starts with one — what it is, plus a Docs Index. Template: brain/doc-structure.md. Add it in this commit."
+      fi ;;
+  esac
+
+  # brain/ root holds only what loads at session start. Everything else has a named home:
+  # docs/ standing docs · history/ dated and dead · routines/ recurring jobs · tools/ scripts.
+  case "$f" in
+    brain/*)
+      echo "$f" | grep -qE "$BRAIN_ALLOW" || fail "'$f' breaks the brain/ tree. Root = the core files only (brain-state, goals, rules, rules.local, facts-core, queue.json, doc-structure, your-move, README). Standing docs -> brain/docs/, dated or superseded -> brain/history/, recurring jobs -> brain/routines/, scripts -> brain/tools/." ;;
+  esac
+done <<< "$STAGED"
+
 exit 0

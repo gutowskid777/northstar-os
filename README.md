@@ -13,6 +13,11 @@ northstar-os gives it your ranked goals, and then it interrupts you. Mid-answer,
 not in a summary afterwards: *"heads up, your #1 is the launch, and this doesn't move it."* You can
 keep going. It just stops being an accident.
 
+That interruption is a hook, not a rule it has to remember. Every message carries your live #1 and
+has to open with a verdict — **SHIP**, **UPKEEP**, or **RABBIT** — before it does any work. A
+RABBIT verdict files the idea and stops, until you type `override`. It also trips on the phrases
+you use while talking yourself into a detour: *real quick*, *just this one*, *while I'm here*.
+
 ```bash
 git clone https://github.com/gutowskid777/northstar-os
 cd northstar-os
@@ -48,10 +53,10 @@ first move.
 `install.sh` links the pre-commit guard (git hooks aren't cloned, so this is the one thing a clone
 can't do for you) and deliberately trips it so you watch it block a bad commit before you trust it.
 
-On first launch Claude Code will ask you to approve the project hook in `.claude/settings.json`.
-That's `brain/tools/reply-brevity.sh`, nine lines of `cat`, and you should read it before you say
-yes. Approving a hook from a repo you cloned without reading it is a bad habit and this one is
-short enough that you don't have to.
+On first launch Claude Code will ask you to approve the project hooks in `.claude/settings.json`.
+There are two: `brain/tools/reply-brevity.sh`, nine lines of `cat`, and `brain/tools/rabbit-gate.sh`,
+which reads your goals file and prints. Read both before you say yes. Approving a hook from a repo
+you cloned without reading it is a bad habit, and these are short enough that you don't have to.
 
 ---
 
@@ -89,7 +94,9 @@ So the rules here are backed by mechanisms:
 | Don't corrupt the queue | Schema check: unique ids, required fields, `_meta.count` must match reality |
 | Don't let a stale session erase your work | Mass-erase guard blocks any commit dropping 10+ row ids without a rotation file alongside it |
 | Never commit a secret | Regex scan of every staged addition, plus a hard block on `credentials.md` |
+| Don't rabbit-hole | A `UserPromptSubmit` hook that names your #1 and demands a SHIP/UPKEEP/RABBIT verdict before any work, and won't proceed on RABBIT without the override word |
 | Keep replies short | A `UserPromptSubmit` hook that reinjects the contract on every single message |
+| Keep the folder tree intact | Pre-commit check: four kinds at the root, a mandatory `context.md` per project, a closed file list at `brain/` root |
 | Run the weekly review | A watermark in `routines/config.json`, checked at session start |
 
 The install script deliberately trips the guard so you watch it block a bad commit before you trust
@@ -119,24 +126,35 @@ populated brain for a fictional user, so you can see what a filled-in `goals.md`
 ```
 CLAUDE.md              55 lines. Zero live data. Names the four files to read at session start.
 AGENTS.md              The same contract for Codex, Cursor, and anything else.
-brain/
+brain/                 Root holds only what loads at session start. The list is closed.
   brain-state.md       Live state. Capped at 150 lines.
   goals.md             The ranked anchor. Everything is scored against this.
   rules.md             The constitution. Generic, safe to pull updates into.
   rules.local.md       Your working style. Yours, never overwritten.
   facts-core.md        Atomic facts. Capped at 50 lines.
   queue.json           THE queue. Capped at 250 rows.
+  doc-structure.md     The tree, and the doc rules. Enforced by the guard.
+  docs/                Standing docs you don't read every session.
   history/             Where everything rotates. Nothing is deleted.
   routines/            Weekly review, Your Move, capture, grind mode. Plus the watermark file.
-  tools/               brain-guard.sh, reply-brevity.sh, install.sh
+  tools/               brain-guard.sh, rabbit-gate.sh, reply-brevity.sh, install.sh
+projects/<name>/       Your projects. context.md at the top of each is mandatory.
 .claude/
-  settings.json        Wires the reply hook via $CLAUDE_PROJECT_DIR. Cloning is the install.
+  settings.json        Wires both hooks via $CLAUDE_PROJECT_DIR. Cloning is the install.
   commands/            /setup  /sync  /weekly-review  /move
 serve.py               Zero-dependency dashboard server, localhost only.
 dashboard/             One HTML file plus seed data.
 example/               A fictional user's fully populated brain.
 docs/                  how-it-works.md, customizing.md
+_trash/                Gitignored. Retired things move here; nothing is ever rm'd.
 ```
+
+---
+
+That tree is enforced, not suggested: the pre-commit guard rejects a new top-level folder, a file
+loose in `projects/`, a project with no `context.md`, and anything dropped at `brain/` root that
+isn't on the list. Changing the shape means editing the guard and `brain/doc-structure.md` in the
+same commit, which is the right amount of friction for a structural decision.
 
 ---
 

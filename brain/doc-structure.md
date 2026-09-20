@@ -5,6 +5,34 @@
 Purpose: stop doc sprawl. A fresh session must be able to tell, in seconds, what a project is and
 which document is the live one, without guessing from filenames and dates.
 
+## The tree (enforced by `brain/tools/brain-guard.sh` on every commit)
+
+One structure, every level. A layout that lives only in a document is true the week you write it
+and false three months later, so this one is a check that runs on every commit.
+
+```
+CLAUDE.md  AGENTS.md  README.md  LICENSE  serve.py  .gitignore  .claude/   the only loose root files
+brain/                     the OS. Root holds ONLY what loads at session start:
+  brain-state.md  goals.md  rules.md  rules.local.md  facts-core.md
+  queue.json  your-move.md  doc-structure.md  README.md   (+ credentials.md, gitignored)
+  docs/        standing docs that aren't read every session (focus-mode, self-improve, your own)
+  history/     dated and dead: decisions-YYYY-MM, queue-closed-YYYY-MM, superseded state
+  routines/    recurring jobs + config.json (the watermark file)
+  tools/       every script and hook
+projects/<name>/           one folder per project, flat. context.md is MANDATORY at its top.
+  <whatever that project needs>
+dashboard/                 the local dashboard page and its data
+_trash/                    gitignored. Retired things move here; nothing is ever rm'd.
+```
+
+**Creating anything, the checklist:** (1) which of those is it? (2) a project → write
+`projects/<name>/context.md` first, then the files; (3) part of an existing project → inside that
+project; (4) a brain file → which named subfolder? the root list is closed; (5) never a new
+top-level folder without editing `brain-guard.sh` and this table in the same commit.
+
+That last friction is deliberate. A new top-level folder is a structural decision, and structural
+decisions should cost one deliberate edit rather than happening by accident at 2am.
+
 ## Per project
 
 - Each project has ONE `context.md`: the **central map**. What it is, which folder holds what, and

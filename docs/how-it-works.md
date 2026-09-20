@@ -71,7 +71,7 @@ Corollary: **a row is a pointer, not an archive.** Long reasoning goes in
 `.git/hooks/pre-commit` is a three-line shim; the logic lives versioned at
 `brain/tools/brain-guard.sh` so it's reviewable and diffable.
 
-Five checks:
+Six checks:
 
 1. **Credentials block.** `credentials.md` can never be staged, even with `git add -f`.
 2. **State caps.** 150 lines / 12KB, with the rotation instruction in the error message.
@@ -87,6 +87,13 @@ Five checks:
    This check deliberately **fails open** on any error, so a python or git hiccup can never brick a
    legitimate commit.
 5. **Secret-shape scan and a 5MB file cap.**
+6. **The tree.** The root has four kinds and nothing else (`brain/`, `projects/`, `dashboard/`,
+   `_trash/`); every project folder must carry a `context.md`; `brain/` root holds only the files
+   that load at session start, with everything else in `docs/`, `history/`, `routines/` or
+   `tools/`.
+   **The failure it prevents:** a layout that is true the week you write it down and false three
+   months later, once four parallel sessions have each invented somewhere to put a file. By then
+   there are four places to look for one thing and no way back without a migration.
 
 **Why a hook and not a rule:** the rules file already said all of this. The rules file is read once,
 at boot, and buried by turn forty. The hook runs on every commit with zero memory required.
@@ -102,9 +109,33 @@ A `UserPromptSubmit` hook fires on every message, so the contract arrives adjace
 turn. Identical words, completely different outcome. Keep it a soft constraint with an escape hatch:
 a hard "three bullets max" clips the answers that genuinely needed room, which is worse than no rule.
 
-This is the clearest instance of the general lesson in §8.
+This is the clearest instance of the general lesson in §9.
 
-## 7. No cron. Watermarks plus session boundaries.
+## 7. `rabbit-gate.sh` — the second `UserPromptSubmit` hook
+
+The promise this repo makes on its first line is that it catches you rabbit-holing. For a long time
+that promise was backed by a paragraph in `rules.md` saying to call drift out loud "when you're
+sure," which is the softest possible instruction: every long session reads it as permission to let
+it slide. This file is what actually enforces it.
+
+It fires on every message and does three things:
+
+1. **Names your live #1**, read fresh from `brain/your-move.md` or the top of `brain/goals.md`. The
+   model never has to remember what you're supposed to be doing, because it's in the current turn.
+2. **Requires a verdict before any work** — `Gate: SHIP`, `Gate: UPKEEP`, or `Gate: RABBIT`. Not a
+   judgment call about whether to mention drift, a line it has to type either way.
+3. **Trips on your own phrasing.** "real quick", "just this one", "while I'm here", "not a rabbit
+   hole but". The pattern those share is a defense raised before anyone objected, which is the most
+   reliable tell there is that you already know.
+
+`RABBIT` means the ask becomes a queue row and nothing else happens until you type `override`. The
+override word is a word you have to type on purpose: "yes" and "go ahead" are reflexes, and a gate
+you can pass by reflex is not a gate.
+
+**The failure it prevents:** the three-hour detour that felt reasonable at every individual step,
+with an AI that watched the whole thing and said nothing because the rule had scrolled out of reach.
+
+## 8. No cron. Watermarks plus session boundaries.
 
 `routines/config.json` stores `last_review` and `cadence_days`. The session-start read checks it and
 surfaces a one-line nudge when it's due.
@@ -116,7 +147,7 @@ guaranteed present, so that's where the work happens.
 
 This is how a manual weekly ritual gets remembered with zero scheduling infrastructure.
 
-## 8. Mechanisms over prose
+## 9. Mechanisms over prose
 
 The meta-rule, and the thesis of the whole repo.
 
